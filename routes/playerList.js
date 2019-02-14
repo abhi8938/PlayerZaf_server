@@ -1,34 +1,23 @@
+//this router handle request for playerList for single match
+
+const { Player } = require('../models/player');
 const Express = require('express');
 const router = Express.Router();
 
-var playerList = [
-    { 
-        id:1,
-        playerName: 'goku',
-        ClientSignIn: 'abhishek8938',
-        walletId: '12314134',
-    
-    },
-    { 
-        id:2,
-        playerName: 'vegeta',
-        ClientSignIn: 'goku8938',
-        walletId: '434345364',
-    
-    }
-]
-router.get('/', (req, res) => {
-    res.send(playerList);
-})
+router.get('/', async (req, res) => {
+    const player = await Player.find();
+    res.send(player);
+});
 
-router.post('/', (req, res)=>{
-    const player = {
-        id: playerList.length + 1,
+router.post('/', async (req, res)=>{
+    let player = new Player ({
+        playerId: Player.length,
         playerName: req.body.playerName,
         ClientSignIn:  req.body.ClientSignIn,
         walletId: req.body.walletId
-    };
-    playerList.push(player);
+    });
+    
+   player = await player.save();
     res.send(player);
 });
 
