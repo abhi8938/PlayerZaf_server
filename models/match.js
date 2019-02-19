@@ -1,23 +1,40 @@
-//This module contains model for a single match
-// data: matchDetails, playerDetails, matchResult
+// this model contains schema and for single match document
+const Joi = require('joi');
+const mongoose = require('mongoose');
 
+//create schema/blueprint for the document
+const matchSchema = new mongoose.Schema({
+       
+    matchDetails:{
+        type: Array,
+        validate: {
+            validator: function(v){
+                return v && v.length > 0;
+            },
+        }
+    },
+    status:{
+        type:String,
+        enum:['Open','closed', 'completed', 'ongoing']
+    },
+    participantList:[String],
 
-// const Joi = require('joi');
-// const mongoose = require('mongoose');
-// const {genreSchema} = require('./genre');
+});
 
-// const Match = mongoose.model('Matches', new mongoose.Schema({
+//create model/class which takes argument matchSchema and collection in which it should be updated
 
-// }));
+const Match = mongoose.model('Matches', matchSchema);
 
-// function validateMatch(match) {
-//   const schema = {
-//     matchId: Joi.String().min(1),
-//     matchName: Joi.string().min(3)
-//   };
+function validateMatch(req){
+    const schema = {
+        status: Joi.string().min(3).required(),
+        matchDetails: Joi.required(),
+        participantList: Joi.required()
+    };
 
-//   return Joi.validate(match, schema);
-// }
+    return Joi.validate(req.body, schema);
+     
+}
 
-// exports.Match = Match; 
-// exports.validate = validateMatch;
+exports.Match = Match;
+exports.validate = validateMatch;

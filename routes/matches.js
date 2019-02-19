@@ -1,27 +1,53 @@
 // This router handles request for matches
 
-// const {Match} = require('../models/match'); 
-// // const {Genre} = require('../models/genre');
-// const mongoose = require('mongoose');
-// const express = require('express');
-// const router = express.Router();
+const {Match, validate} = require('../models/match')
+const express = require('express');
+const router = express.Router();
 
-// router.get('/', async (req, res) => {
-//   const matches = await Match.find();
-//   res.send(matches);
-// });
+//create Get request handler
+router.get('/', async (req,res) => {
+const match = await Match.find({ status:'close'});
+    res.send(match);
+    console.log(match);
+});
 
-// router.post('/', async (req, res) => {
-//   let match = new Match({ 
-//      matchId: req.body.matchId,
-//      matchName: req.body.matchName
-//   });
-//   match = await match.save();
-  
-//    res.send(match);
-//   console.log('result:'+ match);
-// });
+// create Post request Handler
+router.post('/', async (req, res) =>{
+     //Validate request body
+
+     const validation = validate(req);
+    //  console.log(validation.error.details[0].message);
+     if(validation.error){
+         //400 bad request
+         res.status(400).send(validation.error.details[0].message);   
+     }
 
 
+    //create object of Class/Model to post data init  
+    const match = new Match(addNewMatch(req));
+    
+    //save new match document in collection  
+    try{
+    const result = await match.save();
+    res.send('posted') 
+    }
+    catch(ex){
+    for( field in ex.error){
+        console.log(ex.errors[field]);
+    }
+}
+   
+})
 
-// module.exports = router; 
+//create function to add new document in collection
+function addNewMatch(req){
+    const addedMatch = {
+            matchDetails:req.body.matchDetails,
+            status:req.body.status,
+            participantList:req.body.participantList      
+    }
+    return addedMatch;
+}
+
+module.exports = router;
+
