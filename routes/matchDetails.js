@@ -9,7 +9,7 @@ router.get('/', auth, async (req, res) => {
   res.send(matchdetails);
 });
 
-router.post('/', auth, async (req, res) => {
+router.post('/', async (req, res) => {
    //Validate request body
    const validation = validate(req);
    //  console.log(validation.error.details[0].message);
