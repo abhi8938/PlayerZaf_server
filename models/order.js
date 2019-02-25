@@ -5,16 +5,16 @@ const mongoose = require('mongoose');
 //create schema/blueprint for the document
 const orderSchema = new mongoose.Schema({
        
-    orderId:{
+    ORDER_ID:{
         type:String,
         required:true
     },
-    customerId:{
+    CUSTOMER_ID:{
         type:String,
         required:true
     },
     txnAmount:{
-        type:String,
+        type:Number,
         required:true
     },
     customerEmailId:{
@@ -22,7 +22,7 @@ const orderSchema = new mongoose.Schema({
         required:true
     },
     customerMobile:{
-          type:String,
+          type:Number,
           required:true
     }
 
@@ -37,9 +37,9 @@ function validateOrder(req){
     const schema = {
         orderId: Joi.string().required(),
         customerId: Joi.string().required(),
-        txnAmount: Joi.string().required(),
+        txnAmount: Joi.number().required(),
         customerEmailId: Joi.string().required(),
-        customerMobile: Joi.string().required()
+        customerMobile: Joi.number().min(10).required()
     };
 
     return Joi.validate(req.body, schema);

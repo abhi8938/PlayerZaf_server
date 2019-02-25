@@ -1,4 +1,6 @@
 // this model contains schema and for single registered client
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
@@ -30,15 +32,29 @@ const clientSchema = new mongoose.Schema({
         type:Number,
         required:true,
         minlength:10,
+        unique:true
     }, 
     password:{
         type:String,
         required:true,
         minlength:5,
         maxlength:1024
-    }
+    },
+    walletBalance:{
+        type:Number,
+        default:0
+    },
+    customerId:{
+        type:String
+    },
+    isAdmin:Boolean
      
 });
+
+clientSchema.methods.generateAuthToken = function(){
+    const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
+    return token;
+}
 
 //create model/class which takes argument Schema and collection in which it should be updated
 
@@ -50,8 +66,10 @@ function validateClient(req){
        lastName: Joi.string().min(2).required(),
        userName: Joi.string().min(5).required(),
        emailAddress: Joi.string().min(5).required().email(),
-       mobileNumber: Joi.number().min(10).required(),
-       password: Joi.string().min(5).max(255).required()
+       mobileNumber: Joi.number().required().min(10),
+       password: Joi.string().min(5).max(255).required(),
+       walletBalance: Joi.number(),
+       customerId: Joi.string()
     };
 
     return Joi.validate(req.body, schema);

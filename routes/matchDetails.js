@@ -1,16 +1,16 @@
 //This router hanles request for new matchDetails
+const auth = require('../middleWare/auth');
 const { MatchDetail, validate } = require('../models/matchDetail');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   const matchdetails = await MatchDetail.find();
   res.send(matchdetails);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
    //Validate request body
-
    const validation = validate(req);
    //  console.log(validation.error.details[0].message);
     if(validation.error){

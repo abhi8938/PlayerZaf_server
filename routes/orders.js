@@ -3,6 +3,7 @@ const { Order, validate } = require('../models/order');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+const { generateCheckSumHash }= require('../methods');
 
 router.get('/', async (req, res) => {
     const orders = await Order.find();
@@ -10,19 +11,9 @@ router.get('/', async (req, res) => {
   });
 
   router.post('/', async (req, res) => {
-    //Validate request body
- 
-    const validation = validate(req);
-    //  console.log(validation.error.details[0].message);
-     if(validation.error){
-         //400 bad request
-         res.status(400).send(validation.error.details[0].message);   
-     }
-   let orders = new Order(addOrder(req));
- 
+    console.log("request recieved: " + req.body);
    try{
-     orders = await orders.save();
-     res.send(orders);
+     res.redirect('/testtxn');
    }
    catch(ex){
      for(field in ex.error){
@@ -32,17 +23,18 @@ router.get('/', async (req, res) => {
  });
  
 
-  function addOrder(req){
-    const addedOrder={
-          //TODO: handlepost request
-        orderId:req.body.orderId,
-        customerId:req.body.customerId,
-        txnAmount:req.body.txnAmount,
-        customerEmailId:req.body.customerEmailId,
-        customerMobile:req.body.customerMobile
+  // function addOrder(req, count){
+  //   const addedOrder={
+  //         //TODO: handlepost request
+        
+  //       CUSTOMER_Id:req.body.customerId,
+  //       txnAmount:req.body.txnAmount,
+  //       customerEmailId:req.body.customerEmailId,
+  //       customerMobile:req.body.customerMobile,
+  //       // ORDER_ID: req.body.ORDER_ID
 
-    }
-    return addedOrder;
-  }
+  //   }
+  //   return addedOrder;
+  // }
 
   module.exports = router;

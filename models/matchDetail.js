@@ -12,7 +12,12 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 matchEntryFee: Number,
                 matchType: String,
                 matchVersion: String,
-                matchMap: String
+                matchMap: String,
+                matchStatus:{
+                    type:String ,
+                    enum: [ 'OPEN','FULL', 'COMPLETED', 'ONGOING'],
+                    default: 'OPEN'
+                }
 }));
      function validateMatchDetail(req){
                 const schema = {
@@ -26,7 +31,7 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 matchType: Joi.string().min(2).required(),
                 matchVersion: Joi.string().min(3).required(),
                 matchMap: Joi.string().min(2).required(),
-                  
+                matchStatus: Joi.string()  
                 };
             
                 return Joi.validate(req.body, schema);

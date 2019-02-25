@@ -1,4 +1,5 @@
 // this routehandler handles request for participant collection
+const auth = require('../middleWare/auth');
 const { Participant, validate} = require('../models/participant');
 const mongoose = require('mongoose');
 const express = require('express');
@@ -10,7 +11,7 @@ router.get('/', async (req, res) => {
     res.send(participants);
   });
 
-  router.post('/', async (req, res) => {
+  router.post('/', auth, async (req, res) => {
     //Validate request body
  
     const validation = validate(req);
@@ -38,7 +39,10 @@ function addParticipantDetail(req){
           //TODO: handlepost request
           matchId: req.body.matchId,
           playerName: req.body.playerName,
-          clientDetails: req.body.clientDetails
+          userName: req.body.userName,
+          mobileNumber: req.body.mobileNumber,
+          customerId: req.body.customerId
+
     }
     return addedParticipantDetail;
 }

@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const participantSchema = new mongoose.Schema({
        
     matchId:{
-       type:Number,
+       type:String,
        required:true,
     },
     playerName:{
@@ -15,7 +15,18 @@ const participantSchema = new mongoose.Schema({
         minlength:4,
         maxlength:40
     },
-    clientDetails:[String]
+    customerId:{
+        type:String,
+        required:true
+    },
+    userName:{
+        type:String,
+        required:true,
+    },
+    mobileNumber:{
+        type:Number,
+        required:true
+    }
 
 });
 
@@ -25,9 +36,11 @@ const Participant = mongoose.model('Participants', participantSchema);
 
 function validateParticipant(req){
     const schema = {
-        matchId: Joi.number().min(1).required(),
+        matchId: Joi.string().min(1).required(),
         playerName: Joi.string().min(4).required(),
-        clientDetails: Joi.array().required()
+        mobileNumber: Joi.number().min(10).required(),
+        userName: Joi.string().required(),
+        customerId: Joi.string().required()
     };
 
     return Joi.validate(req.body, schema);
