@@ -1,7 +1,7 @@
 // this model contains schema and for single registered client
-
+//fsgdfgxhfcghfhfgfaeeadda
 const Joi = require('joi');
-const mongoose = require('cors');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 const playerResultSchema = mongoose.Schema({
