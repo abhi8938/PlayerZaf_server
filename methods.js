@@ -1,13 +1,33 @@
+const axios = require('axios');
 const { MatchDetail } = require('./models/matchDetail');
 const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
 const { Client } = require('./models/client');
 
-async function generateCheckSumHash(txnDetails, res){
-    
+
+async function sendBulkMessage(request){
+    // const user = 'abhishek8938';
+    // const Api = 'SKtQdDTbuHoaUMMHhpc9';
+    // const type = 'txt';
+    // const message = `Attention!\n PlayerZon Match#809 is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
+    // find the participant of the match with matchId
+const participants = await Participant.find({ matchId: request.matchId});
+
+// for each participant call the messaging api and send request.message and participant.mobileNumber
+// participants.map(async (element) =>{
+//     const number = element.mobileNumber;
+//     console.log(number);
+// await axios.get()
+//      .then(response => console.log(response.data))
+//      .catch(err => console.log("errp" + err));
+// })
+
+// notifyUser();
 }
 
+async function notifyUser(){
 
+}
 
 async function sendReward(result){
     //Gather information to work with
@@ -64,4 +84,5 @@ async function updateWinnings(result){
 
   exports.updateWinnings = updateWinnings;
   exports.sendReward = sendReward;
-  exports.generateCheckSumHash = generateCheckSumHash;
+//   exports.generateCheckSumHash = generateCheckSumHash;
+  exports.sendBulkMessage = sendBulkMessage;

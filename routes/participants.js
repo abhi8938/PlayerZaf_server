@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     res.send(participants);
   });
 
-  router.post('/', auth, async (req, res) => {
+  router.post('/', async (req, res) => {
     //Validate request body
  
     const validation = validate(req);

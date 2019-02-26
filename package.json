@@ -7,13 +7,14 @@
     "test": "jest --watchAll",
     "start": "node index.js"
   },
-  "engines":{
-    "node":"v10.14.1"
+  "engines": {
+    "node": "v10.14.1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
