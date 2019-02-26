@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const engines = require('consolidate');
 const cors = require('cors');
 const app = express();
-redirect(app);
 
 
 require('./startup/logging');
