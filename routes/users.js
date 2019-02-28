@@ -53,7 +53,6 @@ router.put('/', async (req, res) =>{
 
     client.walletBalance = updatedBalance;
     const result= await client.save();
-    console.log(result);
     res.send(result);
   })
 

@@ -5,7 +5,8 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', auth, async (req, res) => {
-  const matchdetails = await MatchDetail.find();
+  const matchdetails = await MatchDetail.find({matchStatus: req.body.matchStatus});
+  console.log(matchdetails);
   res.send(matchdetails);
 });
 

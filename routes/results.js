@@ -4,8 +4,8 @@ const _ = require('lodash');
 const asyncMiddleware = require('../middleWare/async');
 const auth = require('../middleWare/auth');
 const admin = require('../middleWare/admin');
-const { Result, PlayerResult, validate } = require('../models/result');
-const { updateWinnings, sendReward } = require('../methods');
+const { Result, validate } = require('../models/result');
+const { updateWinnings, } = require('../methods');
 const express = require('express');
 const router = express.Router();
 

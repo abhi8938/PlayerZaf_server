@@ -15,7 +15,7 @@ const { sendBulkMessage } = require('../methods');
      }
 
     //  console.log(req.body);
-     sendBulkMessage(req.body);
+     sendBulkMessage(req.body)
  });
 
 
