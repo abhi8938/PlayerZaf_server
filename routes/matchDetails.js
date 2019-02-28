@@ -4,7 +4,7 @@ const { MatchDetail, validate } = require('../models/matchDetail');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   const matchdetails = await MatchDetail.find({matchStatus: req.body.matchStatus});
   console.log(matchdetails);
   res.send(matchdetails);
