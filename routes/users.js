@@ -46,13 +46,12 @@ router.delete('/:id', [auth, admin], async (req,res)=>{
    res.send(client);
 });
 
-router.put('/', async (req, res) =>{
+router.put('/', auth,async (req, res) =>{
     const client = await Client.findOne({ customerId: req.body.customerId});
     if(!client) return;
-    const previousBalance = client.walletBalance;
     const updatedBalance = req.body.walletBalance;
 
-    client.walletBalance = previousBalance + updatedBalance;
+    client.walletBalance = updatedBalance;
     const result= await client.save();
     console.log(result);
     res.send(result);
