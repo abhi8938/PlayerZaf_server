@@ -21,6 +21,7 @@
     "config": "^3.0.1",
     "consolidate": "^0.15.1",
     "cors": "^2.8.5",
+    "crypto-js": "^3.1.9-1",
     "debug": "^4.1.1",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
@@ -32,6 +33,7 @@
     "lodash": "^4.17.11",
     "mongoose": "^5.4.11",
     "pubg-api": "^1.1.2",
+    "razorpay": "^2.0.4",
     "underscore": "^1.9.1",
     "winston": "^3.2.1",
     "winston-mongodb": "^3.0.0"

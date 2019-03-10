@@ -3,6 +3,36 @@ const { MatchDetail } = require('./models/matchDetail');
 const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
 const { Client } = require('./models/client');
+const CryptoJS = require("crypto-js");
+//START
+async  function addMoneyWallet(customer_Id, amount){
+    const client = await Client.findOne({ customerId: customer_Id});
+    console.log(client, amount);
+    }
+//THE END
+
+//START
+
+ function authorizePayment(request){
+     const razorpay_signature = request.body.razorpay_signature;
+     const razorpay_payment_id = request.body.razorpay_payment_id;
+     const razorpay_order_id = request.body.razorpay_order_id;
+     const key_secret = 'NaaBx3baZtAQBd5N0zdMfOWk';  
+     const generated_signature = CryptoJS.HmacSHA256(razorpay_order_id + '|' + razorpay_payment_id,key_secret);
+     const success = 'Payment is Successful';
+     const fail = 'Payment Failed';
+     const customer_Id = request.body.customer_Id;
+     const amount = request.body.amount;
+if(generated_signature == razorpay_signature){
+     addMoneyWallet(customer_Id, amount);
+    return success;
+}else{
+    return fail;
+}
+
+}
+
+//THE END
 
 
 async function sendBulkMessage(request){
@@ -51,8 +81,8 @@ async function updateWallet(customerId, winnings){
    const updatedBalance = previousBalance + winnings;
    console.log(winnings);
    client.walletBalance = updatedBalance;
-   
    await client.save();
+   return client
 }
 
 
@@ -86,3 +116,5 @@ async function updateWinnings(result){
   exports.sendReward = sendReward;
 //   exports.generateCheckSumHash = generateCheckSumHash;
   exports.sendBulkMessage = sendBulkMessage;
+  exports.authorizePayment = authorizePayment;
+  exports.addMoneyWallet = addMoneyWallet;

@@ -1,40 +1,109 @@
 //this router handles request for new order
+const auth = require('../middleWare/auth');
+const Razorpay = require('razorpay');
 const { Order, validate } = require('../models/order');
-const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-const { generateCheckSumHash }= require('../methods');
+const { authorizePayment } = require('../methods');
+
+let rzp = new Razorpay({
+  key_id: 'rzp_test_YYkHkEieicBCSS', // your `KEY_ID`
+  key_secret:'NaaBx3baZtAQBd5N0zdMfOWk' // your `KEY_SECRET`
+});
 
 router.get('/', async (req, res) => {
-    const orders = await Order.find();
+  const orders = await Order.find();
+  console.log(orders);
+  res.send(orders);
+});
+
+router.post('/', async (req, res) => {
+  let count;
+  await Order.collection.count({}, (error, size)=>{
+    count = size + 1; 
+     return count;
+   });
+   //Validate request body
+   const validation = validate(req);
+   //  console.log(validation.error.details[0].message);
+    if(validation.error){
+        //400 bad request
+        res.status(400).send(validation.error.details[0].message);   
+    }
+    let orders = await Order.find();
+    const order = await createOrder(req,count);
+   orders = new Order(addOrder(req, order));
+  try{
+    orders = await orders.save();
     res.send(orders);
-  });
+  }
 
-  router.post('/', async (req, res) => {
-    console.log("request recieved: " + req.body);
-   try{
-     res.redirect('/testtxn');
-   }
-   catch(ex){
-     for(field in ex.error){
-       console.log(ex.errors[field]);
-     }
-   }
- });
- 
+  catch(ex){
+    for(field in ex.error){
+      console.log(ex.errors[field]);
+    }
+  }
+});
 
-  // function addOrder(req, count){
-  //   const addedOrder={
-  //         //TODO: handlepost request
-        
-  //       CUSTOMER_Id:req.body.customerId,
-  //       txnAmount:req.body.txnAmount,
-  //       customerEmailId:req.body.customerEmailId,
-  //       customerMobile:req.body.customerMobile,
-  //       // ORDER_ID: req.body.ORDER_ID
+//create route to handle put request for   razorpay_payment_id
 
-  //   }
-  //   return addedOrder;
-  // }
+router.put('/', async (req, res) => {
+  //add   razorpay_payment_id in database
+const order = await Order.findOne({ RAZORPAY_ID: req.body.razorpay_order_id})
+if(!order) return;
 
-  module.exports = router;
+order.razorpay_payment_id = req.body.razorpay_payment_id
+const result = await order.save();
+console.log(result);
+
+//Call function AuthorizePayment to capture payment
+const paymentresult = authorizePayment(req);
+res.send(paymentresult);
+
+//Update Wallet Balance for the current user
+
+})
+
+
+function addOrder(req, order){
+ const addedOrder={
+        //TODO: handlepos request
+        RAZORPAY_ID: order.id,
+        customer_Id: req.body.customer_Id,
+        amount: order.amount,
+        currency: 'INR',
+        receipt: order.receipt,   //CREATE RANDOM RECEIPT STRING
+        payment_capture: true,
+        status: order.status,
+        attempt: order.attempt,
+        notes: 'Payment Test 1', 
+        customerEmailId: req.body.customerEmailId,
+        customerMobile: req.body.customerMobile,
+        created_at:order.created_at
+  }
+  return addedOrder;
+}
+
+async function createOrder(req, count){
+
+  const amount= req.body.amount;
+  const currency= 'INR';
+  const receipt= 'RECEIPT#' + count;
+  const payment_capture = true;
+  const notes='Payment Test 3'; 
+
+  return rzp.orders.create({
+   amount,
+   currency,
+   receipt,
+   payment_capture,
+   notes
+
+  }).then((data) => {
+    return data;
+  }).catch((err) => {
+    return err;
+  }); 
+}
+
+module.exports = router; 
