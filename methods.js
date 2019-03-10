@@ -7,13 +7,12 @@ const CryptoJS = require("crypto-js");
 //START
 async  function addMoneyWallet(customer_Id, amount){
     const client = await Client.findOne({ customerId: customer_Id});
-    console.log(customer_Id);
     }
 //THE END
 
 //START
 
- function authorizePayment(request){
+async function authorizePayment(request){
      const razorpay_signature = request.body.razorpay_signature;
      const razorpay_payment_id = request.body.razorpay_payment_id;
      const razorpay_order_id = request.body.razorpay_order_id;
@@ -23,8 +22,9 @@ async  function addMoneyWallet(customer_Id, amount){
      const fail = 'Payment Failed';
      const customer_Id = request.body.customer_Id;
      const amount = request.body.amount;
+     console.log(customer_Id);
 if(generated_signature == razorpay_signature){
-     addMoneyWallet(customer_Id, amount);
+     await addMoneyWallet(customer_Id, amount);
     return success;
 }else{
     return fail;
