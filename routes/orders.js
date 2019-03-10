@@ -57,7 +57,7 @@ const result = await order.save();
 console.log(result);
 
 //Call function AuthorizePayment to capture payment
-const paymentresult = authorizePayment(req);
+const paymentresult = await authorizePayment(req);
 res.send(paymentresult);
 
 })

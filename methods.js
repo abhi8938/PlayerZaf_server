@@ -11,8 +11,8 @@ async  function addMoneyWallet(customer_Id, amount){
     const client = await Client.findOne({ customerId: customer_Id});
     if(!client) return;
     client.walletBalance = client.walletBalance + amount;
-    console.log(client);
-    // await client.save();
+    await client.save();
+    return client;
     }
 //THE END
 
@@ -29,7 +29,7 @@ async function authorizePayment(request){
      const customer_Id = request.body.customer_Id;
      const amount = request.body.amount;
 if(generated_signature == razorpay_signature){
-     await addMoneyWallet(customer_Id, amount);
+    await addMoneyWallet(customer_Id, amount);
      return success;
 }else{
     return fail;
