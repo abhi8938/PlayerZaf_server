@@ -7,7 +7,7 @@ const CryptoJS = require("crypto-js");
 //START
 async  function addMoneyWallet(customer_Id, amount){
     const client = await Client.findOne({ customerId: customer_Id});
-    console.log(client, amount);
+    console.log(customer_Id);
     }
 //THE END
 
