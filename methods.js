@@ -30,6 +30,7 @@ async function authorizePayment(request){
      const amount = request.body.amount;
 if(generated_signature == razorpay_signature){
      await addMoneyWallet(customer_Id, amount);
+     return success;
 }else{
     return fail;
 }}
