@@ -57,9 +57,6 @@ const participants = await Participant.find({ matchId: request.matchId});
 // notifyUser();
 }
 
-async function notifyUser(){
-
-}
 
 async function sendReward(result){
     //Gather information to work with
