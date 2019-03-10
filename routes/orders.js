@@ -60,8 +60,6 @@ console.log(result);
 const paymentresult = authorizePayment(req);
 res.send(paymentresult);
 
-//Update Wallet Balance for the current user
-
 })
 
 
