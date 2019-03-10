@@ -9,6 +9,7 @@ const CryptoJS = require("crypto-js");
 async  function addMoneyWallet(customer_Id, amount){
     const success = 'Payment Successfull: Wallet Updated'
     const client = await Client.findOne({ customerId: customer_Id});
+    if(!client) return;
     client.walletBalance = client.walletBalance + amount;
     console.log(client);
     // await client.save();
@@ -29,7 +30,6 @@ async function authorizePayment(request){
      const amount = request.body.amount;
 if(generated_signature == razorpay_signature){
      await addMoneyWallet(customer_Id, amount);
-    return success;
 }else{
     return fail;
 }}
