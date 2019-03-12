@@ -35,6 +35,7 @@ router.post('/', async (req, res) => {
    orders = new Order(addOrder(req, order));
   try{
     orders = await orders.save();
+    console.log('orders:' + orders);
     res.send(orders);
   }
 
@@ -54,7 +55,6 @@ if(!order) return;
 
 order.razorpay_payment_id = req.body.razorpay_payment_id
 const result = await order.save();
-console.log(result);
 
 //Call function AuthorizePayment to capture payment
 const paymentresult = await authorizePayment(req);
@@ -64,11 +64,12 @@ res.send(paymentresult);
 
 
 function addOrder(req, order){
+  const amount = order.amount/100
  const addedOrder={
         //TODO: handlepos request
         RAZORPAY_ID: order.id,
         customer_Id: req.body.customer_Id,
-        amount: order.amount,
+        amount: amount,
         currency: 'INR',
         receipt: order.receipt,   //CREATE RANDOM RECEIPT STRING
         payment_capture: true,
