@@ -4,10 +4,10 @@ const { Participant, validate} = require('../models/participant');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-
+const { updateParticipants } = require('../methods');
 
 router.get('/', async (req, res) => {
-    const participants = await Participant.find();
+    const participants = await Participant.find({matchId:req.headers.matchid});
     res.send(participants);
   });
 
@@ -24,7 +24,9 @@ router.get('/', async (req, res) => {
  
    try{
      participants = await participants.save();
-     res.send(participants);
+   const result =  await updateParticipants(participants.matchId);
+  //  console.log(result);
+     res.send(result);
    }
    catch(ex){
      for(field in ex.error){

@@ -7,8 +7,8 @@ const router = express.Router();
 const { authorizePayment } = require('../methods');
 
 let rzp = new Razorpay({
-  key_id: 'rzp_test_YYkHkEieicBCSS', // your `KEY_ID`
-  key_secret:'NaaBx3baZtAQBd5N0zdMfOWk' // your `KEY_SECRET`
+  key_id: 'rzp_test_CKbrU2ADCJ3Kcc', // your `KEY_ID`
+  key_secret:'ESEZvJE8sq3wdebESDrHe5gS' // your `KEY_SECRET`
 });
 
 router.get('/', async (req, res) => {

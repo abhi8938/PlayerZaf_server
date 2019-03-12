@@ -4,8 +4,19 @@ const { MatchDetail, validate } = require('../models/matchDetail');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  const matchdetails = await MatchDetail.find();
+router.get('/open', async (req, res) => {
+  const matchdetails = await MatchDetail.find({ matchStatus: 'OPEN'});
+  console.log(matchdetails);
+  res.send(matchdetails);
+});
+router.get('/completed', async (req, res) => {
+  const matchdetails = await MatchDetail.find({ matchStatus: 'COMPLETED'});
+  console.log(matchdetails);
+  res.send(matchdetails);
+});
+
+router.get('/ongoing', async (req, res) => {
+  const matchdetails = await MatchDetail.find({ matchStatus: 'ONGOING'});
   console.log(matchdetails);
   res.send(matchdetails);
 });

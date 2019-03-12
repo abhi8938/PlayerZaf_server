@@ -6,6 +6,24 @@ const { Client } = require('./models/client');
 const CryptoJS = require("crypto-js");
 
 //START
+async  function updateMatchStatus(matchId){
+    const match = await MatchDetail.findOne({ matchId: matchId});
+    match.matchStatus = 'COMPLETED'
+    await match.save();
+   console.log(match);
+    }
+//THE END
+
+//START
+async  function updateParticipants(matchId){
+    const match = await MatchDetail.findOne({ matchId: matchId});
+    match.matchParticipants = match.matchParticipants + 1;
+    await match.save();
+   return match;
+    }
+//THE END
+
+//START
 async  function addMoneyWallet(customer_Id, amount){
     const success = 'Payment Successfull: Wallet Updated'
     const client = await Client.findOne({ customerId: customer_Id});
@@ -22,7 +40,7 @@ async function authorizePayment(request){
      const razorpay_signature = request.body.razorpay_signature;
      const razorpay_payment_id = request.body.razorpay_payment_id;
      const razorpay_order_id = request.body.razorpay_order_id;
-     const key_secret = 'NaaBx3baZtAQBd5N0zdMfOWk';  
+     const key_secret = 'ESEZvJE8sq3wdebESDrHe5gS';  
      const generated_signature = CryptoJS.HmacSHA256(razorpay_order_id + '|' + razorpay_payment_id,key_secret);
      const success = 'Payment is Successful';
      const fail = 'Payment Failed';
@@ -100,12 +118,26 @@ async function updateWinnings(result){
     // foreach playerResult calculate and add winnings to playerResult.winnings
   
     playerResults.forEach(element => {
+        if(matchDetail.matchType == 'SOLO'){
         if(element.winner){
         element.winnings = (element.totalKills * perKill) + winPrize; 
         }else if(!element.winner){
             element.winnings = element.totalKills * perKill;
         }
-  
+    }else if(matchDetail.matchType == 'DUO'){
+        if(element.winner){
+            element.winnings = (element.totalKills * perKill) + (winPrize/2); 
+            }else if(!element.winner){
+                element.winnings = element.totalKills * perKill;
+            }
+    }else if(matchDetail.matchType == 'SQUAD'){
+        if(element.winner){
+            element.winnings = (element.totalKills * perKill) + (winPrize/4); 
+            }else if(!element.winner){
+                element.winnings = element.totalKills * perKill;
+            }
+    }
+
     });
    const resolve = await result.save();
    sendReward(result);
@@ -118,3 +150,5 @@ async function updateWinnings(result){
   exports.sendBulkMessage = sendBulkMessage;
   exports.authorizePayment = authorizePayment;
   exports.addMoneyWallet = addMoneyWallet;
+  exports.updateParticipants = updateParticipants;
+  exports.updateMatchStatus = updateMatchStatus;
