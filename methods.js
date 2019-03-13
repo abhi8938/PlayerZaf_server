@@ -40,7 +40,7 @@ async function authorizePayment(request){
      const razorpay_signature = request.body.razorpay_signature;
      const razorpay_payment_id = request.body.razorpay_payment_id;
      const razorpay_order_id = request.body.razorpay_order_id;
-     const key_secret = 'ESEZvJE8sq3wdebESDrHe5gS';  
+     const key_secret = '1DhJOuaW4MGHlSGzGYHv5FEF';  
      const generated_signature = CryptoJS.HmacSHA256(razorpay_order_id + '|' + razorpay_payment_id,key_secret);
      const success = 'Payment is Successful';
      const fail = 'Payment Failed';
