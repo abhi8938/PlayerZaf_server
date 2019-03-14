@@ -43,7 +43,7 @@ const orderSchema = new mongoose.Schema({
         required:true
     },
     customerMobile:{
-          type:Number,
+          type:String,
           required:true
     },
     razorpay_payment_id:{
@@ -72,7 +72,7 @@ function validateOrder(req){
         attempt: Joi.string(),
         notes: Joi.string(),
         customerEmailId: Joi.string().required(),
-        customerMobile: Joi.number().min(10).required(),
+        customerMobile: Joi.string().min(10).required(),
         created_at: Joi.number(),
         razorpay_payment_id: Joi.string()
     };

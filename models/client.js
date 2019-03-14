@@ -29,7 +29,7 @@ const clientSchema = new mongoose.Schema({
         unique:true
     },
     mobileNumber:{
-        type:Number,
+        type:String,
         required:true,
         minlength:10,
         unique:true
@@ -47,8 +47,25 @@ const clientSchema = new mongoose.Schema({
     customerId:{
         type:String
     },
-    isAdmin:Boolean
-     
+    amountWon:{
+        type:Number,
+        default:0
+    },
+    totalKills:{
+        type:Number,
+        default:0
+    },
+    matchesPlayed:{
+        type:Number,
+        default:0
+    },
+    isAdmin:{
+        type:Boolean,
+        default:false
+    },
+    promoCode:{
+        type:String
+    }
 });
 
 clientSchema.methods.generateAuthToken = function(){
@@ -66,10 +83,36 @@ function validateClient(req){
        lastName: Joi.string().min(2).required(),
        userName: Joi.string().min(5).required(),
        emailAddress: Joi.string().min(5).required().email(),
-       mobileNumber: Joi.number().required().min(10),
+       mobileNumber: Joi.string().required().min(10),
        password: Joi.string().min(5).max(255).required(),
        walletBalance: Joi.number(),
-       customerId: Joi.string()
+       customerId: Joi.string(),
+       amountWon: Joi.number(),
+       totalKills: Joi.number(),
+       matchesPlayed: Joi.number(),
+       promoCode: Joi.string()
+    };
+
+    return Joi.validate(req.body, schema);
+     
+}
+function validateMobileNumber(req){
+    const schema = {
+       mobileNumber: Joi.string(),
+       customerId: Joi.string().required(),
+       firstName: Joi.string(),
+       lastName: Joi.string()
+    };
+
+    return Joi.validate(req.body, schema);
+     
+}
+function validatePasswordUpdate(req){
+    const schema = {
+       customerId: Joi.string().required(),
+       oldPassword: Joi.string().required(),
+       newPassword: Joi.string().min(5).max(255).required()
+      
     };
 
     return Joi.validate(req.body, schema);
@@ -78,3 +121,5 @@ function validateClient(req){
 
 exports.Client = Client;
 exports.validate = validateClient;
+exports.validateMobile = validateMobileNumber;
+exports.validatePassword = validatePasswordUpdate;

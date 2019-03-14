@@ -10,7 +10,6 @@ async  function updateMatchStatus(matchId){
     const match = await MatchDetail.findOne({ matchId: matchId});
     match.matchStatus = 'COMPLETED'
     await match.save();
-   console.log(match);
     }
 //THE END
 
@@ -20,7 +19,7 @@ async  function updateParticipants(matchId){
     match.matchParticipants = match.matchParticipants + 1;
     await match.save();
    return match;
-    }
+  }
 //THE END
 
 //START
@@ -88,17 +87,19 @@ async function sendReward(result){
         const participant = await Participant
         .findOne()
         .and([{ matchId:element.matchId },{ playerName:element.playerName}]);
-        updateWallet(participant.customerId, element.winnings);
+        updatePlayerStats(participant.customerId, element.winnings, element.totalKills);
     });
 }
 
-async function updateWallet(customerId, winnings){
+async function updatePlayerStats(customerId, winnings, kills){
    const client = await Client.findOne({ customerId:customerId});
    if(!client) return;
    const previousBalance = client.walletBalance;
    const updatedBalance = previousBalance + winnings;
-   console.log(winnings);
    client.walletBalance = updatedBalance;
+   client.amountWon = client.amountWon + winnings;
+   client.totalKills = client.totalKills + kills;
+   client.matchesPlayed = client.matchesPlayed + 1;
    await client.save();
    return client
 }
@@ -139,14 +140,12 @@ async function updateWinnings(result){
     }
 
     });
-   const resolve = await result.save();
+  await result.save();
    sendReward(result);
-    console.log(resolve);
   }
 
   exports.updateWinnings = updateWinnings;
   exports.sendReward = sendReward;
-//   exports.generateCheckSumHash = generateCheckSumHash;
   exports.sendBulkMessage = sendBulkMessage;
   exports.authorizePayment = authorizePayment;
   exports.addMoneyWallet = addMoneyWallet;

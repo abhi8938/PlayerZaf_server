@@ -24,7 +24,7 @@ const participantSchema = new mongoose.Schema({
         required:true,
     },
     mobileNumber:{
-        type:Number,
+        type:String,
         required:true
     }
 
@@ -38,7 +38,7 @@ function validateParticipant(req){
     const schema = {
         matchId: Joi.string().min(1).required(),
         playerName: Joi.string().min(4).required(),
-        mobileNumber: Joi.number().min(10).required(),
+        mobileNumber: Joi.string().min(10).required(),
         userName: Joi.string().required(),
         customerId: Joi.string().required()
     };
