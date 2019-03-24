@@ -8,7 +8,7 @@
     "start": "node index.js"
   },
   "engines": {
-    "node": "v10.14.1"
+    "node": "v11.12.0"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,7 @@
     "axios": "^0.18.0",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
-    "compression": "^1.7.3",
+    "compression": "^1.7.4",
     "config": "^3.0.1",
     "consolidate": "^0.15.1",
     "cors": "^2.8.5",
@@ -27,11 +27,12 @@
     "express": "^4.16.4",
     "express-async-errors": "^3.1.1",
     "express-redirect": "^1.2.2",
-    "helmet": "^3.15.1",
+    "helmet": "^3.16.0",
     "joi": "^13.1.0",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "mongoose": "^5.4.11",
+    "nodemon": "^1.18.10",
     "pubg-api": "^1.1.2",
     "razorpay": "^2.0.4",
     "underscore": "^1.9.1",

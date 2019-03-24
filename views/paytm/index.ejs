@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Paytm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="main.js"></script>
+</head>
+<body>
+    <form method="post" actions="http://localhost:3000/api/paytm/request">
+        <table>
+            <tbody>
+        <input type="text" id="ORDER_ID" name="ORDER_ID" value="ORDER#10"/>
+          <input type="text" id="INDUSTRY_TYPE_ID" name="INDUSTRY_TYPE_ID" value="Retail"/>
+          <input type="text" id="CUST_ID" name="CUST_ID" value="CUST#1"/>
+          <input type="text" id="CHANNEL_ID" name="CHANNEL_ID" value="WEB"/>
+          <input type="text" id="TXN_AMOUNT" name="TXN_AMOUNT" value="100"/>
+          <input type="text" id="WEBSITE" name="WEBSITE" value="WEBSTAGING"/>
+          <input type="text" id="MID" name="MID" value="lHaxeA37804396370427"/>
+          <input type="text" id="PAYTM_MERCHANT_KEY" name="PAYTM_MERCHANT_KEY" value="_&V_hxMwd%gIxTG7"/>
+          <button type="submit">Submit</button>
+        </tbody>
+    </table>
+      </form>    
+</html>

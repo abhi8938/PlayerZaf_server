@@ -7,7 +7,9 @@ const orders = require('../routes/orders');
 const matches = require('../routes/matches');
 const auth = require('../routes/auth');
 const result = require('../routes/results');
-const sendmessage = require('../routes/sendMessage')
+const sendmessage = require('../routes/sendMessage');
+const paytm = require('../app/routes/paytm.routes');
+
 
 module.exports = function(app) {
     app.use(express.json());
@@ -19,4 +21,5 @@ app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/results', result);
 app.use('/api/sendMessage', sendmessage);
+app.use('/api/paytm', paytm);
 }
