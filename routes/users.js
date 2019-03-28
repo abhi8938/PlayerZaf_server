@@ -110,7 +110,7 @@ function addClient(req, count){
     emailAddress: req.body.emailAddress,
     mobileNumber: req.body.mobileNumber, 
     password: req.body.password,
-    customerId:'CUST#00'+ count
+    customerId:'CUST@00'+ count
   };
   return addedClient;
 }

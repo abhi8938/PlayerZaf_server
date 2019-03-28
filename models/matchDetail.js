@@ -10,7 +10,10 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 matchWinPrize: Number,
                 matchPerkill: Number,
                 matchEntryFee: Number,
-                matchType: String,
+                matchType:{ 
+                    type:String,
+                    enum:[ 'SQUAD', 'DUO', 'SOLO']
+                },
                 matchVersion: String,
                 matchMap: String,
                 matchParticipants:{

@@ -1,12 +1,12 @@
 const axios = require('axios');
+const CryptoJS = require("crypto-js");
 const { MatchDetail } = require('./models/matchDetail');
 const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
 const { Client } = require('./models/client');
-const CryptoJS = require("crypto-js");
 
 //START
-async  function updateMatchStatus(matchId){
+async function updateMatchStatus(matchId){
     const match = await MatchDetail.findOne({ matchId: matchId});
     match.matchStatus = 'COMPLETED'
     await match.save();
@@ -34,23 +34,23 @@ async  function addMoneyWallet(customer_Id, amount){
 //THE END
 
 //START
-
-async function authorizePayment(request){
-     const razorpay_signature = request.body.razorpay_signature;
-     const razorpay_payment_id = request.body.razorpay_payment_id;
-     const razorpay_order_id = request.body.razorpay_order_id;
-     const key_secret = '1DhJOuaW4MGHlSGzGYHv5FEF';  
-     const generated_signature = CryptoJS.HmacSHA256(razorpay_order_id + '|' + razorpay_payment_id,key_secret);
-     const success = 'Payment is Successful';
-     const fail = 'Payment Failed';
-     const customer_Id = request.body.customer_Id;
-     const amount = request.body.amount;
-if(generated_signature == razorpay_signature){
-    await addMoneyWallet(customer_Id, amount);
-     return success;
-}else{
-    return fail;
-}}
+//RAZORPAY
+// async function authorizePayment(request){
+//      const razorpay_signature = request.body.razorpay_signature;
+//      const razorpay_payment_id = request.body.razorpay_payment_id;
+//      const razorpay_order_id = request.body.razorpay_order_id;
+//      const key_secret = '1DhJOuaW4MGHlSGzGYHv5FEF';  
+//      const generated_signature = CryptoJS.HmacSHA256(razorpay_order_id + '|' + razorpay_payment_id,key_secret);
+//      const success = 'Payment is Successful';
+//      const fail = 'Payment Failed';
+//      const customer_Id = request.body.customer_Id;
+//      const amount = request.body.amount;
+// if(generated_signature == razorpay_signature){
+//     await addMoneyWallet(customer_Id, amount);
+//      return success;
+// }else{
+//     return fail;
+// }}
 
 //THE END
 
@@ -147,7 +147,7 @@ async function updateWinnings(result){
   exports.updateWinnings = updateWinnings;
   exports.sendReward = sendReward;
   exports.sendBulkMessage = sendBulkMessage;
-  exports.authorizePayment = authorizePayment;
+//   exports.authorizePayment = authorizePayment;
   exports.addMoneyWallet = addMoneyWallet;
   exports.updateParticipants = updateParticipants;
   exports.updateMatchStatus = updateMatchStatus;

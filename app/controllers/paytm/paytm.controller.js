@@ -1,4 +1,5 @@
 var checksum = require('./checksum');
+var request = require('request');
 
 module.exports = {
     getRequest: (req, res) => {
@@ -15,14 +16,28 @@ module.exports = {
                  paramarray[name] = paramlist[name]
              }
          }
-         paramarray["CALLBACK_URL"] = "http://localhost:3000/api/paytm/response";
+         paramarray["CALLBACK_URL"] = "https://playerzaf.herokuapp.com/api/paytm/response";
          checksum.genchecksum(paramarray, PAYTM_MERCHANT_KEY, (err, result) =>{
              if(err) console.log(err);
              res.render("paytm/request", {result});
          });
         },
        response: (req, res) =>{
-           console.log(req.body);
-           res.render("paytm/response")
+          const verified= checksum.verifychecksum(req.body,"_&V_hxMwd%gIxTG7");
+          if(verified == true){
+              console.log(req.body);
+              if(req.body.RESPCODE === '01'){
+                res.render("paytm/response",{
+                    status: true,
+                    result: req.body
+                });
+              }else {
+                  res.render("paytm/response",{
+                      status:false,
+                      result:req.body
+                  })
+              }
+           
+          }
        } 
 }
