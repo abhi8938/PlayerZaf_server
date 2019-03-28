@@ -11,7 +11,8 @@ router.get('/', async (req, res) => {
   });
 
   router.get('/count', async (req, res) => {
-    const transactions = await Transaction.count({ customerId: req.headers.customerid});
+    const transactions = await Transaction.estimatedDocumentCount();
+    console.log(transactions);  
     res.send(transactions.toString());
   });  
 
