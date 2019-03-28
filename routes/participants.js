@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
    try{
      participants = await participants.save();
    const result =  await updateParticipants(participants.matchId);
-  //  console.log(result);
+   console.log(result);
      res.send(participants);
    }
    catch(ex){
