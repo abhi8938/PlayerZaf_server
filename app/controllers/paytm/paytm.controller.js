@@ -23,7 +23,7 @@ module.exports = {
          });
         },
        response: (req, res) =>{
-          const verified= checksum.verifychecksum(req.body,"_&V_hxMwd%gIxTG7");
+          const verified= checksum.verifychecksum(req.body,"x4jPqiWysTbUhRYx");
           if(verified == true){
             if(req.body.RESPCODE == '402'){
                 setTimeout(function(){
@@ -33,7 +33,7 @@ module.exports = {
                 res.render("paytm/response",{
                     status: true,
                     result: req.body
-                });
+                }); 
               }else {
                   res.render("paytm/response",{
                       status:false,
@@ -53,7 +53,7 @@ function checkTXN(req, res){
   }
   var checkString = JSON.stringify(check);
    
-  return checksum.genchecksumbystring(checkString, "_&V_hxMwd%gIxTG7", function (err, result) 
+  return checksum.genchecksumbystring(checkString, "x4jPqiWysTbUhRYx", function (err, result) 
           {
             console.log(req.body);
             if(err){
@@ -61,12 +61,14 @@ function checkTXN(req, res){
             }else{
                 console.log(`Result:${result}`);
                 return request({
-                   url:'https://securegw-stage.paytm.in/merchant-status/getTxnStatus',
+                   url:'https://securegw.paytm.in/merchant-status/getTxnStatus',
                    headers: {
                     'Content-Type': 'application/json',
+                    'JsonData':{
                     'ORDERID': req.body.ORDERID,
                     'MID': req.body.MID,
                     'CHECKSUMHASH': result
+                   }
                   },  
                    method:'POST',   
                  }, function(error, response, body){
@@ -76,7 +78,19 @@ function checkTXN(req, res){
                    }else{
                      // const resp1 = JSON.parse(response.body);
                      console.log(`response:${response.body}`);
-                     return res.send(response.body);
+                     if(response.body.RESPCODE === '01'){
+                     return( res.render("paytm/response",{
+                          status: true,
+                          result: req.body
+                      })
+                     )
+                    }else {
+                      return(res.render("paytm/response",{
+                            status:false,
+                            result:req.body
+                        })
+                      )
+                    }
                    }
                  });
             }

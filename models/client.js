@@ -45,7 +45,8 @@ const clientSchema = new mongoose.Schema({
         default:0
     },
     customerId:{
-        type:String
+        type:String,
+        unique:true
     },
     amountWon:{
         type:Number,

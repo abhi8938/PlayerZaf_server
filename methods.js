@@ -1,5 +1,6 @@
 const axios = require('axios');
 const CryptoJS = require("crypto-js");
+const unirest = require('unirest');
 const { MatchDetail } = require('./models/matchDetail');
 const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
@@ -35,43 +36,66 @@ async  function addMoneyWallet(customer_Id, amount){
 
 //START
 //RAZORPAY
-// async function authorizePayment(request){
-//      const razorpay_signature = request.body.razorpay_signature;
-//      const razorpay_payment_id = request.body.razorpay_payment_id;
-//      const razorpay_order_id = request.body.razorpay_order_id;
-//      const key_secret = '1DhJOuaW4MGHlSGzGYHv5FEF';  
-//      const generated_signature = CryptoJS.HmacSHA256(razorpay_order_id + '|' + razorpay_payment_id,key_secret);
-//      const success = 'Payment is Successful';
-//      const fail = 'Payment Failed';
-//      const customer_Id = request.body.customer_Id;
-//      const amount = request.body.amount;
-// if(generated_signature == razorpay_signature){
-//     await addMoneyWallet(customer_Id, amount);
-//      return success;
-// }else{
-//     return fail;
-// }}
+async function authorizePayment(request){
+     const razorpay_signature = request.body.razorpay_signature;
+     const razorpay_payment_id = request.body.razorpay_payment_id;
+     const razorpay_order_id = request.body.razorpay_order_id;
+     const key_secret = '1DhJOuaW4MGHlSGzGYHv5FEF';  
+     const generated_signature = CryptoJS.HmacSHA256(razorpay_order_id + '|' + razorpay_payment_id,key_secret);
+     const success = 'Payment is Successful';
+     const fail = 'Payment Failed';
+     const customer_Id = request.body.customer_Id;
+     const amount = request.body.amount;
+if(generated_signature == razorpay_signature){
+    await addMoneyWallet(customer_Id, amount);
+     return success;
+}else{
+    return fail;
+}}
 
 //THE END
 
 
 async function sendBulkMessage(request){
-    // const user = 'abhishek8938';
-    // const Api = 'SKtQdDTbuHoaUMMHhpc9';
-    // const type = 'txt';
-    // const message = `Attention!\n PlayerZon Match#809 is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
+    const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
+    const message = `Attention!\n PlayerZon ${request.matchId} is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
     // find the participant of the match with matchId
 const participants = await Participant.find({ matchId: request.matchId});
-
-// for each participant call the messaging api and send request.message and participant.mobileNumber
-// participants.map(async (element) =>{
-//     const number = element.mobileNumber;
-//     console.log(number);
-// await axios.get()
-//      .then(response => console.log(response.data))
-//      .catch(err => console.log("errp" + err));
-// })
-
+const numbers = new Array();
+// for each participant 
+//    -call the messaging api
+//    -save all the numbers in an array
+//    -stringify numbers Array 
+//    -
+participants.map( (element) =>{
+      numbers.push(element.mobileNumber);
+})
+//call the api with request body and header
+const numberString = numbers.toString();
+var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+req.query({
+    "authorization": Api,
+    "sender_id": "PLAYER",
+    "message": message,
+    "language": "english",
+    "route": "p",
+    "numbers": numberString,
+  });
+  
+  req.headers({
+    "cache-control": "no-cache"
+  });
+  
+  
+  req.end(function (res) {
+    if (res.error) throw new Error(res.error);
+    if(res.body.return == true){
+        return res.body.message
+    }else{
+        return res.body.message
+    }
+  });
+  return req;
 // notifyUser();
 }
 
@@ -147,7 +171,7 @@ async function updateWinnings(result){
   exports.updateWinnings = updateWinnings;
   exports.sendReward = sendReward;
   exports.sendBulkMessage = sendBulkMessage;
-//   exports.authorizePayment = authorizePayment;
+  exports.authorizePayment = authorizePayment;
   exports.addMoneyWallet = addMoneyWallet;
   exports.updateParticipants = updateParticipants;
   exports.updateMatchStatus = updateMatchStatus;

@@ -3,7 +3,10 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
 const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
-                matchId: String,
+                matchId:{
+                    type:String,
+                    unique:true
+                },
                 matchTitle: String,
                 matchTime: String,
                 matchDate: String,
@@ -28,7 +31,7 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
 }));
      function validateMatchDetail(req){
                 const schema = {
-                    matchId: Joi.string().min(1).required(),
+                matchId: Joi.string().min(1).required(),
                 matchTitle: Joi.string().min(3).required(),
                 matchTime: Joi.string().min(4).required(),
                 matchDate: Joi.string().min(4).required(),
