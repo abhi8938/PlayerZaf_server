@@ -8,6 +8,7 @@ const { updateParticipants } = require('../methods');
 
 router.get('/', async (req, res) => {
     const participants = await Participant.find({matchId:req.headers.matchid});
+    console.log(req.headers);
     res.send(participants);
   });
 

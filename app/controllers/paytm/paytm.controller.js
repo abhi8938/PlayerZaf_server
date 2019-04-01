@@ -25,8 +25,11 @@ module.exports = {
        response: (req, res) =>{
           const verified= checksum.verifychecksum(req.body,"_&V_hxMwd%gIxTG7");
           if(verified == true){
-              console.log(req.body);
-              if(req.body.RESPCODE === '01'){
+            if(req.body.RESPCODE == '402'){
+                setTimeout(function(){
+                    return checkTXN(req,res);
+                    }, 5000);
+              } else if(req.body.RESPCODE === '01'){
                 res.render("paytm/response",{
                     status: true,
                     result: req.body
@@ -41,3 +44,44 @@ module.exports = {
           }
        } 
 }
+
+function checkTXN(req, res){
+    // console.log(resp.orderId);
+  var check = {
+             "MID":req.body.MID,
+             "ORDERID":req.body.ORDERID
+  }
+  var checkString = JSON.stringify(check);
+   
+  return checksum.genchecksumbystring(checkString, "_&V_hxMwd%gIxTG7", function (err, result) 
+          {
+            console.log(req.body);
+            if(err){
+                console.log(`error:${err}`);
+            }else{
+                console.log(`Result:${result}`);
+                return request({
+                   url:'https://securegw-stage.paytm.in/merchant-status/getTxnStatus',
+                   headers: {
+                    'Content-Type': 'application/json',
+                    'ORDERID': req.body.ORDERID,
+                    'MID': req.body.MID,
+                    'CHECKSUMHASH': result
+                  },  
+                   method:'POST',   
+                 }, function(error, response, body){
+                   if(error){
+                       console.log(`error:${error}`);
+                     return error;
+                   }else{
+                     // const resp1 = JSON.parse(response.body);
+                     console.log(`response:${response.body}`);
+                     return res.send(response.body);
+                   }
+                 });
+            }
+             
+          });
+  
+  }
+  
