@@ -7,8 +7,8 @@ const router = express.Router();
 const { authorizePayment } = require('../methods');
 
 let rzp = new Razorpay({
-  key_id: 'rzp_live_48lMXKHLE5drdp', // your `KEY_ID`
-  key_secret:'1DhJOuaW4MGHlSGzGYHv5FEF' // your `KEY_SECRET`
+  key_id: 'rzp_live_Osjem2QarhHF8m', // your `KEY_ID`
+  key_secret:'naAmOknspcgDOpUV9EpejXDh' // your `KEY_SECRET`
 });
 
 router.get('/', async (req, res) => {
@@ -30,6 +30,7 @@ router.post('/', async (req, res) => {
         //400 bad request
         res.status(400).send(validation.error.details[0].message);   
     }
+    console.log(req.body);
     let orders = await Order.find();
     const order = await createOrder(req,count);
    orders = new Order(addOrder(req, order));
