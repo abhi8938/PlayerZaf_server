@@ -11,9 +11,9 @@ samarray =
 {"request":
 {
   "requestType":null, 
-  "merchantGuid":"6c119d23-9ae0-42ea-bb8c-b180ca4d3efb",
+  "merchantGuid":"d03eef72-e248-47f9-9b47-8194e13407b0",
   "salesWalletName":'PayTM',
-  "salesWalletGuid":"3856aa1a-4a26-11e9-af8f-fa163e429e83",
+  "salesWalletGuid":"2ccee9c7-bac1-4ad0-9053-73790a8fb775",
   "payeeEmailId":null,
   "payeePhoneNumber":req.headers.paytmnumber,
   "payeeSsoId":null,
@@ -32,15 +32,15 @@ samarray =
 
 
 var finalstring = JSON.stringify(samarray);
- checksum.genchecksumbystring(finalstring, "V_X@HqAn5Q%f4nVy", function (err, result) 
+ checksum.genchecksumbystring(finalstring, "F_F#bnxKhtfH41jy", function (err, result) 
         {
             request({
-            url: 'https://trust-uat.paytm.in/wallet-web/asyncSalesToUserCredit', //URL to hit
+            url: 'https://trust.paytm.in/wallet-web/asyncSalesToUserCredit', //URL to hit
           //  qs: finalstring, //Query string data
             method: 'POST',
             headers: {
                     'Content-Type': 'application/json',
-                    'mid': '6c119d23-9ae0-42ea-bb8c-b180ca4d3efb',
+                    'mid': 'd03eef72-e248-47f9-9b47-8194e13407b0',
                     'checksumhash': result
                      },
             body: finalstring//Set the body as a string
@@ -68,21 +68,21 @@ var check = {
   "requestType":"merchanttxnid", 
   "txnType":"SALES_TO_USER_CREDIT", 
   "txnId":resp.orderId, 
-  "merchantGuid":"6c119d23-9ae0-42ea-bb8c-b180ca4d3efb"
+  "merchantGuid":"d03eef72-e248-47f9-9b47-8194e13407b0"
 }, 
 "operationType":"CHECK_TXN_STATUS",
 "platformName":"PayTM",
 "ipAddress":"PayTM" 
 }
 var checkString = JSON.stringify(check);
-return checksum.genchecksumbystring(checkString, "V_X@HqAn5Q%f4nVy", function (err, result) 
+return checksum.genchecksumbystring(checkString, "F_F#bnxKhtfH41jy", function (err, result) 
         {
          return request({
-            url:'https://trust-uat.paytm.in//wallet-web/checkStatus',
+            url:'https://trust.paytm.in//wallet-web/checkStatus',
             method:'POST',
             headers: {
               'Content-Type': 'application/json',
-              'mid': '6c119d23-9ae0-42ea-bb8c-b180ca4d3efb',
+              'mid': 'd03eef72-e248-47f9-9b47-8194e13407b0',
               'checksumhash': result
                },
             body:checkString
