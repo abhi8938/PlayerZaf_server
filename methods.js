@@ -30,6 +30,7 @@ async  function addMoneyWallet(customer_Id, amount){
     if(!client) return;
     client.walletBalance = client.walletBalance + amount;
     await client.save();
+    console.log(`balance:${client}`);
     return client;
     }
 //THE END
@@ -40,7 +41,7 @@ async function authorizePayment(request){
      const razorpay_signature = request.body.razorpay_signature;
      const razorpay_payment_id = request.body.razorpay_payment_id;
      const razorpay_order_id = request.body.razorpay_order_id;
-     const key_secret = '1DhJOuaW4MGHlSGzGYHv5FEF';  
+     const key_secret = 'naAmOknspcgDOpUV9EpejXDh';  
      const generated_signature = CryptoJS.HmacSHA256(razorpay_order_id + '|' + razorpay_payment_id,key_secret);
      const success = 'Payment is Successful';
      const fail = 'Payment Failed';

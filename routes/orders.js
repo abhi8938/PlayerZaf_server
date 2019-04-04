@@ -55,7 +55,7 @@ const order = await Order.findOne({ RAZORPAY_ID: req.body.razorpay_order_id})
 if(!order) return;
 
 order.razorpay_payment_id = req.body.razorpay_payment_id
-const result = await order.save();
+await order.save();
 
 //Call function AuthorizePayment to capture payment
 const paymentresult = await authorizePayment(req);
