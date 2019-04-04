@@ -29,10 +29,11 @@ router.post('/', async (req, res) => {
   
    let client = await Client.findOne({ emailAddress: req.body.emailAddress });
    if(client) return res.status(400).send('emailAddress already exist');
-   let client = await Client.findOne({ mobileNumber: req.body.mobileNumber });
+
+   client = await Client.findOne({ mobileNumber: req.body.mobileNumber });
    if(client) return res.status(400).send('mobileNumber already exist');
 
-   if(count == undefined) return res.status(400).send('Server Error, Please Try Again');
+   if(count == undefined) return res.status(400).send('Server Error, Plese Try Again');
    client = new Client(addClient(req, count)); 
 
    const salt = await bcrypt.genSalt(10);
@@ -42,7 +43,6 @@ router.post('/', async (req, res) => {
 
    const token = client.generateAuthToken();
    res.header('x-auth-token', token).send(_.pick(client, ['firstName', 'emailAddress']));
-  
 });
 
 router.delete('/:id', [auth, admin], async (req,res)=>{
