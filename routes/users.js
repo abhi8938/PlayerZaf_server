@@ -22,7 +22,6 @@ router.post('/', async (req, res) => {
   await Client.collection.countDocuments({}, (error, size)=>{
     if(error) throw error;
     count = size + 1; 
-     console.log('size:' + count);
      return count;
    });
    const { error } = validate(req);
@@ -30,7 +29,7 @@ router.post('/', async (req, res) => {
   
    let client = await Client.findOne({ emailAddress: req.body.emailAddress });
    if(client) return res.status(400).send('user already registered');
- 
+    if(count == undefined) return res.status(500).send('Server Error, Please Try Again');
    client = new Client(addClient(req, count)); 
 
    const salt = await bcrypt.genSalt(10);
@@ -102,7 +101,7 @@ router.put('/password', async (req, res) => {
 });
 
 function addClient(req, count){
-  
+  console.log('size:' + count);
   const addedClient={
     //TODO: handlepost request
     firstName: req.body.firstName,
