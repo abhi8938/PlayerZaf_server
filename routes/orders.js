@@ -19,7 +19,8 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   let count;
-  await Order.collection.count({}, (error, size)=>{
+  await Order.collection.countDocuments({}, (error, size)=>{
+    if(error) throw error;
     count = size + 1; 
      return count;
    });

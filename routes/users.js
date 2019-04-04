@@ -19,9 +19,10 @@ router.get('/me', auth,  async (req, res, next) => {
 router.post('/', async (req, res) => {
    
   let count;
-  await Client.collection.count({}, (error, size)=>{
+  await Client.collection.countDocuments({}, (error, size)=>{
+    if(error) throw error;
     count = size + 1; 
-    //  console.log('size:' + count);
+     console.log('size:' + count);
      return count;
    });
    const { error } = validate(req);

@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema({
     },
     customer_Id:{
         type:String,
-        required:true
+        required:true,
     },
     amount:{
         type:Number,
