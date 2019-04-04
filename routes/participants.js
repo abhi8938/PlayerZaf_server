@@ -21,7 +21,10 @@ router.get('/', async (req, res) => {
          //400 bad request
          res.status(400).send(validation.error.details[0].message);   
      }
-   let participants = new Participant(addParticipantDetail(req));
+
+     let participants = await Participant.findOne({ matchId:req.body.matchId, playerName:req.body.playerName});
+      if(participants) return res.status(400).send('player already registered');
+     participants = new Participant(addParticipantDetail(req));
  
    try{
      participants = await participants.save();
