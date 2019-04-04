@@ -28,8 +28,11 @@ router.post('/', async (req, res) => {
    if (error) return res.status(400).send(error.details[0].message);
   
    let client = await Client.findOne({ emailAddress: req.body.emailAddress });
-   if(client) return res.status(400).send('user already registered');
-    if(count == undefined) return res.status(500).send('Server Error, Please Try Again');
+   if(client) return res.status(400).send('emailAddress already exist');
+   let client = await Client.findOne({ mobileNumber: req.body.mobileNumber });
+   if(client) return res.status(400).send('mobileNumber already exist');
+
+   if(count == undefined) return res.status(400).send('Server Error, Please Try Again');
    client = new Client(addClient(req, count)); 
 
    const salt = await bcrypt.genSalt(10);
