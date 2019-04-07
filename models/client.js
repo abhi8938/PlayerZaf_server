@@ -84,7 +84,7 @@ function validateClient(req){
        lastName: Joi.string().min(2).required(),
        userName: Joi.string().min(5).required(),
        emailAddress: Joi.string().min(5).required().email(),
-       mobileNumber: Joi.string().required().min(10),
+       mobileNumber: Joi.string().required().min(10).max(10),
        password: Joi.string().min(5).max(255).required(),
        walletBalance: Joi.number(),
        customerId: Joi.string(),
