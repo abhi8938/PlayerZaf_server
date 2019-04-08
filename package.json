@@ -32,6 +32,8 @@
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "mongoose": "^5.4.11",
+    "nodemailer": "^6.1.0",
+    "nodemailer-express-handlebars": "^3.0.0",
     "nodemon": "^1.18.10",
     "pubg-api": "^1.1.2",
     "razorpay": "^2.0.4",

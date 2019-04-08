@@ -59,7 +59,7 @@ if(generated_signature == razorpay_signature){
 
 async function sendBulkMessage(request){
     const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
-    const message = `Attention!\n PlayerZon ${request.matchId} is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
+    const message = `Attention!\n PlayerZaf ${request.matchId} is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
     // find the participant of the match with matchId
 const participants = await Participant.find({ matchId: request.matchId});
 const numbers = new Array();
@@ -73,13 +73,14 @@ participants.map( (element) =>{
 })
 //call the api with request body and header
 const numberString = numbers.toString();
+console.log(numberString);
 var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
 req.query({
     "authorization": Api,
     "sender_id": "PLAYER",
     "message": message,
     "language": "english",
-    "route": "p",
+    "route": "t",
     "numbers": numberString,
   });
   

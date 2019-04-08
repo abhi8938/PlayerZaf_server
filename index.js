@@ -1,6 +1,7 @@
 
 require('express-async-errors');
 const startupDebugger = require('debug')('app:startup');
+const path = require('path');
 const express = require('express')
     , redirect = require("express-redirect");
 const bodyParser = require('body-parser');
