@@ -10,6 +10,7 @@ const result = require('../routes/results');
 const sendmessage = require('../routes/sendMessage');
 const paytm = require('../app/routes/paytm.routes');
 const transaction = require('../routes/transactions');
+const resetPassword = require('../routes/resetPassword');
 
 module.exports = function(app) {
     app.use(express.json());
@@ -23,4 +24,5 @@ app.use('/api/results', result);
 app.use('/api/sendMessage', sendmessage);
 app.use('/api/paytm', paytm);
 app.use('/api/transaction', transaction);
+app.use('/api/resetPassword', resetPassword);
 }

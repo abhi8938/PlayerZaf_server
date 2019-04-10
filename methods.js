@@ -1,10 +1,40 @@
-const axios = require('axios');
 const CryptoJS = require("crypto-js");
 const unirest = require('unirest');
 const { MatchDetail } = require('./models/matchDetail');
 const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
 const { Client } = require('./models/client');
+const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
+//START
+async function sendResetMessage(token, clientNumber){
+    const resetMessage = `Click the link to reset your PlayerZaf App Password:\n http://localhost:3000/reset/${token}`;
+    var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+req.query({
+    "authorization": Api,
+    "sender_id": "PLAYER",
+    "message": resetMessage,
+    "language": "english",
+    "route": "t",
+    "numbers": clientNumber,
+  });
+  
+  req.headers({
+    "cache-control": "no-cache"
+  });
+  
+  
+  req.end(function (res) {
+    if (res.error) throw new Error(res.error);
+    if(res.body.return == true){
+        return res.body.message
+    }else{
+        return res.body.message
+    }
+  });
+  return req;
+
+}
+//END
 
 //START
 async function updateMatchStatus(matchId){
@@ -58,7 +88,6 @@ if(generated_signature == razorpay_signature){
 
 
 async function sendBulkMessage(request){
-    const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
     const message = `Attention!\n PlayerZaf ${request.matchId} is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
     // find the participant of the match with matchId
 const participants = await Participant.find({ matchId: request.matchId});
@@ -67,7 +96,6 @@ const numbers = new Array();
 //    -call the messaging api
 //    -save all the numbers in an array
 //    -stringify numbers Array 
-//    -
 participants.map( (element) =>{
       numbers.push(element.mobileNumber);
 })
@@ -177,3 +205,4 @@ async function updateWinnings(result){
   exports.addMoneyWallet = addMoneyWallet;
   exports.updateParticipants = updateParticipants;
   exports.updateMatchStatus = updateMatchStatus;
+  exports.sendResetMessage = sendResetMessage;
