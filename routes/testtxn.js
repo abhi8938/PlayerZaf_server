@@ -1,10 +1,12 @@
 var checksum = require('../models/utility/checksum');
 var http = require('http');
+const auth = require('../middleWare/auth');
+// const admin = require('../middleWare/admin');
 var request = require('request');
 
 module.exports = function (app) {
 
- app.get('/withdraw', function(req,res){
+ app.get('/withdraw',auth, function(req,res){
 var samarray = new Array();
 
 samarray = 

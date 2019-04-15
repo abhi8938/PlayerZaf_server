@@ -11,13 +11,13 @@ let rzp = new Razorpay({
   key_secret:'naAmOknspcgDOpUV9EpejXDh' // your `KEY_SECRET`
 });
 
-router.get('/', async (req, res) => {
+router.get('/',auth, async (req, res) => {
   const orders = await Order.find();
   console.log(orders);
   res.send(orders);
 });
 
-router.post('/', async (req, res) => {
+router.post('/',auth, async (req, res) => {
   let count;
   await Order.collection.countDocuments({}, (error, size)=>{
     if(error) throw error;
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
 
 //create route to handle put request for   razorpay_payment_id
 
-router.put('/', async (req, res) => {
+router.put('/', auth, async (req, res) => {
   //add   razorpay_payment_id in database
 const order = await Order.findOne({ RAZORPAY_ID: req.body.razorpay_order_id})
 if(!order) return;

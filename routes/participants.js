@@ -1,18 +1,20 @@
 // this routehandler handles request for participant collection
 const auth = require('../middleWare/auth');
+const admin = require('../middleWare/admin');
 const { Participant, validate} = require('../models/participant');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const { updateParticipants } = require('../methods');
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const participants = await Participant.find({matchId:req.headers.matchid});
-    console.log(req.headers);
+    if(participants == [] ) return res.status(400).send('Invalid MatchID');
+    // console.log(req.headers);
     res.send(participants);
   });
 
-  router.post('/', async (req, res) => {
+  router.post('/', auth, async (req, res) => {
     //Validate request body
  
     const validation = validate(req);

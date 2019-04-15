@@ -4,7 +4,7 @@ const _= require('lodash');
 const asyncMiddleware = require('../middleWare/async');
 const auth = require('../middleWare/auth');
 const admin = require('../middleWare/admin');
-const { Client, validate, validateMobile, validatePassword } = require('../models/client');
+const { Client, validate, validateMobile, validatePassword, validateResetPassword } = require('../models/client');
 const express = require('express');
 const router = express.Router();
 
@@ -40,9 +40,7 @@ router.post('/', async (req, res) => {
    client.password = await bcrypt.hash(client.password, salt);
    
    client = await client.save();
-
-   const token = client.generateAuthToken();
-   res.header('x-auth-token', token).send(_.pick(client, ['firstName', 'emailAddress']));
+   res.send(_.pick(client, ['firstName', 'emailAddress']));
 });
 
 router.delete('/:id', [auth, admin], async (req,res)=>{
@@ -51,7 +49,7 @@ router.delete('/:id', [auth, admin], async (req,res)=>{
    res.send(client);
 });
 
-router.put('/balance', async (req, res) =>{
+router.put('/balance',auth, async (req, res) =>{
     const client = await Client.findOne({ customerId: req.body.customerId});
     if(!client) return;
     const updatedBalance = req.body.walletBalance;
@@ -62,7 +60,7 @@ router.put('/balance', async (req, res) =>{
   })
 
 // create put route handler to update firstName, lastName, mobileNumber
-router.put('/details', async (req, res) => {
+router.put('/details',auth, async (req, res) => {
   const client = await Client.findOne({ customerId: req.body.customerId});
   if(!client) return;
   // const { error } = validateMobile(req);
@@ -87,9 +85,9 @@ router.put('/details', async (req, res) => {
 
 });
 // create put route handler to update password
-router.put('/password', async (req, res) => {
+router.put('/password',auth, async (req, res) => {
   const client = await Client.findOne({ customerId: req.body.customerId});
-  if(!client) return;
+  if(!client) return res.status(404).json('no user exists in db to update');;
   
   const { error } = validatePassword(req);
   if (error) return res.status(400).send(error.details[0].message);
@@ -102,6 +100,32 @@ router.put('/password', async (req, res) => {
    await client.save();
   res.send('Password Updated');
 });
+
+//create forgotPasswordReset handler
+router.put('/resetPassword', async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const client = await Client.findOne({ userName: req.body.userName});
+  const { error } = validateResetPassword(req);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  if(!client) {
+    return res.status(404).json('no user exists in db to update');
+  }else if(client){
+    console.log('user exists');
+    return bcrypt.hash(req.body.password, salt)
+                      .then( newPassword => {
+                         console.log(newPassword);
+                         client.password = newPassword;
+                         client.resetPasswordToken = null;
+                         client.resetPasswordExpires = null;
+                      })
+                      .then(async () =>{
+                      await client.save();
+                       res.status(200).send({ message:'password updated'})
+                      });
+  }
+});
+
 
 function addClient(req, count){
   console.log('size:' + count);

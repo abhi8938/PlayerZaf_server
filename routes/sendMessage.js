@@ -1,22 +1,23 @@
 // this routehandler handles request for participant collection
 const auth = require('../middleWare/auth');
+const admin = require('../middleWare/admin');
 const Joi = require('joi');
 const express = require('express');
 const router = express.Router();
 const { sendBulkMessage } = require('../methods');
 
-  router.post('/', async (req, res) => {
+  router.post('/',[auth, admin], async (req, res) => {
     //Validate request body
     const validation = validate(req);
     //  console.log(validation.error.details[0].message);
      if(validation.error){
-         //400 bad request
+        //400 bad request
          res.status(400).send(validation.error.details[0].message);   
      }
 
     //  console.log(req.body);
     const messageStatus = await sendBulkMessage(req.body)
-     res.send(messageStatus.body.message[0]);
+     res.status(200).send(messageStatus.body.message[0]);
  });
 
 

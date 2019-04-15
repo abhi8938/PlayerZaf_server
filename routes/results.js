@@ -4,7 +4,7 @@ const _ = require('lodash');
 const asyncMiddleware = require('../middleWare/async');
 const auth = require('../middleWare/auth');
 const admin = require('../middleWare/admin');
-const { Result, validate } = require('../models/result');
+const { Result, validate, validatePlayer } = require('../models/result');
 const { updateWinnings, updateMatchStatus } = require('../methods');
 const express = require('express');
 const router = express.Router();
@@ -16,16 +16,35 @@ router.get('/', auth, async (req, res, next) => {
   res.send(results);
 
 });
-router.post('/', async (req, res) => {
-
+router.post('/', [auth, admin], async (req, res) => {
+  // console.log(req.body);
   const { error } = validate(req);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let result = new Result(addResult(req));
+  let result = await Result.findOne({ matchId:req.body.matchId});
+  if(result) return res.status(400).send('Result Already Declared');
+
+  const playerResults = req.body.playerResults;
+  const playerErrors = new Array;
+  playerResults.forEach(playerResult => {
+    const { error } = validatePlayer(playerResult);
+    if (error) {
+    playerErrors.push(`${error.details[0].message} for playerName ${playerResult.playerName}`);
+    }
+  });
+  // console.log(playerErrors);
+  if(playerErrors == null){
+    return res.status(400).send(playerErrors.toString());
+  }else if(playerErrors != null){
+    // console.log(result);
+    result = new Result(addResult(req));
   result = await result.save();
- await updateWinnings(result);
- await updateMatchStatus(req.body.matchId);
-  res.send(result);
+  await updateWinnings(result);
+  await updateMatchStatus(req.body.matchId);
+  return res.status(200).send(`RESULT DECLARED: ${result.matchId}`);
+  }
+  
+  
 });
 
 

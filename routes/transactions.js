@@ -10,13 +10,13 @@ router.get('/', async (req, res) => {
     res.send(transactions);
   });
 
-  router.get('/count', async (req, res) => {
+  router.get('/count', auth, async (req, res) => {
     const transactions = await Transaction.estimatedDocumentCount();
     console.log(transactions);  
     res.send(transactions.toString());
   });  
 
-  router.post('/', async (req, res) => {
+  router.post('/',auth, async (req, res) => {
     //Validate request body
  
     const validation = validate(req);

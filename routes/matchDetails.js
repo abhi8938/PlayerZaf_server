@@ -1,27 +1,28 @@
 //This router hanles request for new matchDetails
 const auth = require('../middleWare/auth');
+const admin = require('../middleWare/admin');
 const { MatchDetail, validate } = require('../models/matchDetail');
 const express = require('express');
 const router = express.Router();
 
-router.get('/open', async (req, res) => {
+router.get('/open', auth, async (req, res) => {
   const matchdetails = await MatchDetail.find({ matchStatus: 'OPEN'});
   console.log(matchdetails);
   res.send(matchdetails);
 });
-router.get('/completed', async (req, res) => {
+router.get('/completed', auth, async (req, res) => {
   const matchdetails = await MatchDetail.find({ matchStatus: 'COMPLETED'});
   console.log(matchdetails);
   res.send(matchdetails);
 });
 
-router.get('/ongoing', async (req, res) => {
+router.get('/ongoing', auth, async (req, res) => {
   const matchdetails = await MatchDetail.find({ matchStatus: 'ONGOING'});
   console.log(matchdetails);
   res.send(matchdetails);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', [auth,admin], async (req, res) => {
    //Validate request body
    const validation = validate(req);
    //  console.log(validation.error.details[0].message);
@@ -29,11 +30,14 @@ router.post('/', async (req, res) => {
         //400 bad request
         res.status(400).send(validation.error.details[0].message);   
     }
-  let matchdetails = new MatchDetail(addMatchDetail(req));
+   
+   let matchdetails = await MatchDetail.findOne({ matchId: req.body.matchId})
+   if(matchdetails) return res.status(400).send('Duplicate MatchId')
+   matchdetails = new MatchDetail(addMatchDetail(req));
 
   try{
     matchdetails = await matchdetails.save();
-    res.send(matchdetails);
+    res.status(200).send(`MATCH ADDED: ${matchdetails.matchId}`);
   }
   catch(ex){
     for(field in ex.error){

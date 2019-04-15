@@ -66,6 +66,14 @@ const clientSchema = new mongoose.Schema({
     },
     promoCode:{
         type:String
+    },
+    resetPasswordToken:{
+        type:String,
+        default:null
+    },
+    resetPasswordExpires:{
+        type:Number,
+        default:null
     }
 });
 
@@ -91,7 +99,9 @@ function validateClient(req){
        amountWon: Joi.number(),
        totalKills: Joi.number(),
        matchesPlayed: Joi.number(),
-       promoCode: Joi.string()
+       promoCode: Joi.string(),
+       resetPasswordToken: Joi.string(),
+       resetPasswordExpires: Joi.number()
     };
 
     return Joi.validate(req.body, schema);
@@ -119,8 +129,19 @@ function validatePasswordUpdate(req){
     return Joi.validate(req.body, schema);
      
 }
+function validateResetPassword(req){
+    const schema = {
+       userName: Joi.string().required(),
+       password: Joi.string().min(5).max(255).required()
+       
+    };
+
+    return Joi.validate(req.body, schema);
+     
+}
 
 exports.Client = Client;
 exports.validate = validateClient;
 exports.validateMobile = validateMobileNumber;
 exports.validatePassword = validatePasswordUpdate;
+exports.validateResetPassword = validateResetPassword;

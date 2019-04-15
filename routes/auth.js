@@ -1,15 +1,9 @@
 //This router hanles request for new Clients
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
-const _= require('lodash');
 const { Client } = require('../models/client');
 const express = require('express');
 const router = express.Router();
-
-router.get('/', async (req, res) => {
-  const client = await Client.find();
-  res.send(client);
-});
 
 router.post('/', async (req, res) => {
    //Validate request body
@@ -27,6 +21,7 @@ router.post('/', async (req, res) => {
    res.send(token);
 
 });
+
 
 function validate(req){
     const schema = {

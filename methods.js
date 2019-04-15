@@ -1,13 +1,40 @@
 const CryptoJS = require("crypto-js");
 const unirest = require('unirest');
+const axios = require('axios');
 const { MatchDetail } = require('./models/matchDetail');
 const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
 const { Client } = require('./models/client');
 const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
 //START
+async function generateToken(orderId, amount){
+    // console.log(`tokenpara:${orderId}+ ${amount}`);
+    var req = unirest("POST", "https://api.cashfree.com/api/v2/cftoken/order");
+      req.headers({
+        'Content-Type':'application/json',
+        'x-client-id':'1186014786b6ec7db6fc8e66906811',
+        'x-client-secret':'35b20b16e9c72046e12d7057320a67960b864f7e'
+      });
+      req.send({
+        "orderId": orderId,
+        "orderAmount":amount,
+        "orderCurrency": "INR"
+      });
+      
+      req.end(function (res) {
+        if (res.error) throw new Error(res.error);
+        if(res.body.status == 'OK'){
+            return res.body.cftoken
+        }else{
+            return res.body.message
+        }
+      });
+      return req;
+    }
+//END
+//START
 async function sendResetMessage(token, clientNumber){
-    const resetMessage = `Click the link to reset your PlayerZaf App Password:\n http://localhost:3000/reset/${token}`;
+    const resetMessage = `Click the link to reset your PlayerZaf App Password:\n http://localhost:3000/reset/?token=${token}`;
     var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
 req.query({
     "authorization": Api,
@@ -118,7 +145,6 @@ req.query({
   
   
   req.end(function (res) {
-    if (res.error) throw new Error(res.error);
     if(res.body.return == true){
         return res.body.message
     }else{
@@ -206,3 +232,4 @@ async function updateWinnings(result){
   exports.updateParticipants = updateParticipants;
   exports.updateMatchStatus = updateMatchStatus;
   exports.sendResetMessage = sendResetMessage;
+  exports.generateToken = generateToken;
