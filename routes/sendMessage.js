@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const { sendBulkMessage } = require('../methods');
 
-  router.post('/',[auth, admin], async (req, res) => {
+  router.post('/', async (req, res) => {
     //Validate request body
     const validation = validate(req);
     //  console.log(validation.error.details[0].message);
