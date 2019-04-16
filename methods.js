@@ -34,7 +34,7 @@ async function generateToken(orderId, amount){
 //END
 //START
 async function sendResetMessage(token, clientNumber){
-    const resetMessage = `Click the link to reset your PlayerZaf App Password:\n http://localhost:3000/reset/?token=${token}`;
+    const resetMessage = `Click the link to reset your PlayerZaf App Password:\n http://playerzaf.com/dashboard/#/reset/?token=${token}`;
     var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
 req.query({
     "authorization": Api,

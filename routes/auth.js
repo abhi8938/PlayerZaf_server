@@ -12,13 +12,13 @@ router.post('/', async (req, res) => {
    if (error) return res.status(400).send(error.details[0].message);
   
    const client = await Client.findOne({ emailAddress: req.body.emailAddress });
-   if(!client) return res.status(400).send('Invalid Email or password');
+   if(!client) return res.status(400).send('Invalid Email ');
   
    const validPassword = await bcrypt.compare(req.body.password, client.password);
    if(!validPassword) return res.status(400).send('Invalid Password');
  
    const token= client.generateAuthToken();
-   res.send(token);
+   res.status(200).send(token);
 
 });
 

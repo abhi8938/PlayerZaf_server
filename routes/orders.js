@@ -20,7 +20,7 @@ router.get('/',auth, async (req, res) => {
 router.post('/',auth, async (req, res) => {
   let count;
   await Order.collection.countDocuments({}, (error, size)=>{
-    if(error) throw error;
+    if(error) return res.status(404).send('Something went wrong!');
     count = size + 1; 
      return count;
    });
@@ -53,7 +53,7 @@ router.post('/',auth, async (req, res) => {
 router.put('/', auth, async (req, res) => {
   //add   razorpay_payment_id in database
 const order = await Order.findOne({ RAZORPAY_ID: req.body.razorpay_order_id})
-if(!order) return;
+if(!order) return res.status(400).send('Oops Something went wrong!..Try Again ');
 
 order.razorpay_payment_id = req.body.razorpay_payment_id
 await order.save();
