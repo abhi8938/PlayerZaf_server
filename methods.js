@@ -15,7 +15,7 @@ async function updateWallet(matchId, customerId){
         console.log('notfound match');
         return
     }else{
-        const entryfee = matchDetail.matchEntryFree;
+        const entryfee = matchDetail.matchEntryFee;
         matchDetail.matchParticipants = matchDetail.matchParticipants + 1;
         const result = await matchDetail.save();
         let client = await Client.findOne({ customerId: customerId});
@@ -24,7 +24,9 @@ async function updateWallet(matchId, customerId){
             return
         }else{
         const Balance = client.walletBalance; 
-        console.log(`client:${Balance} entryfee:${matchDetail.matchEntryFee}`);
+        const updatedBalance = Balance - entryfee;
+        client.walletBalance = updatedBalance;
+        console.log(`client:${client}`);
         const response = await client.save();
         console.log(`response:${response}`);
          return response;
