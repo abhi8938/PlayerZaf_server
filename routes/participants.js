@@ -5,7 +5,7 @@ const { Participant, validate} = require('../models/participant');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-const { updateParticipants, updateWallet } = require('../methods');
+const { updateWallet } = require('../methods');
 
 router.get('/', auth, async (req, res) => {
     const participants = await Participant.find({matchId:req.headers.matchid});
@@ -16,7 +16,7 @@ router.get('/', auth, async (req, res) => {
 
   router.post('/',auth, async (req, res) => {
     //Validate request body
- 
+ console.log(req.body);
     const validation = validate(req);
     //  console.log(validation.error.details[0].message);
      if(validation.error){
@@ -30,9 +30,9 @@ router.get('/', auth, async (req, res) => {
  
    try{
      participants = await participants.save();
-   const result =  await updateWallet(participants.matchId, participants.customerId);
-     console.log(result);
-     res.status(200).send(result);
+     await updateWallet(participants.matchId, participants.customerId);
+     console.log(participants);
+     res.status(200).send('JOINED SUCCESSFULLY');
    }
    catch(ex){
      for(field in ex.error){

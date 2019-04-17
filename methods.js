@@ -19,8 +19,7 @@ async function updateWallet(matchId, customerId){
     client.walletBalance = updatedBalance;
    const client = await client.save();
    await updateParticipants(matchId);
-    console.log(client);
-   return client;
+    console.log(updatedBalance);
 }
 //END
 
