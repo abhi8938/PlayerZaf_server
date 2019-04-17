@@ -23,11 +23,11 @@ async function updateWallet(matchId, customerId){
             console.log('not found client');
             return
         }else{
-        const walletBalance = client.walletBalance; 
-        const updatedBalance = walletBalance - entryfee;
+        const Balance = client.walletBalance; 
+        const updatedBalance = Balance - entryfee;
         client.walletBalance = updatedBalance;
-        console.log(`client:${walletBalance} updated:${updatedBalance}`);
-        const response =await client.save();
+        console.log(`client:${walletBalance} updated:${updatedBalance} entryfee:${entryfee}`);
+        const response = await client.save();
         console.log(`response:${response}`);
          return response;
         }
