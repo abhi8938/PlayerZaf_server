@@ -18,9 +18,9 @@ async function updateWallet(matchId, customerId){
     const updatedBalance = parseInt(walletBalance - entryfee);
     client.walletBalance = updatedBalance;
    const client = await client.save();
-   const response = await updateParticipants(matchId);
+   await updateParticipants(matchId);
     console.log(client);
-   return response;
+   return client;
 }
 //END
 
@@ -94,8 +94,6 @@ async function updateParticipants(matchId){
     const match = await MatchDetail.findOne({ matchId: matchId});
     match.matchParticipants = match.matchParticipants + 1;
     await match.save();
-    const success = 'JOINED SUCCESSFULLY';
-   return success;
   }
 //THE END
 
