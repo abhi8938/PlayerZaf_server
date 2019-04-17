@@ -12,13 +12,14 @@ async function updateWallet(matchId, customerId){
     const matchDetail = await MatchDetail.findOne({ matchId: matchId});
     if(!matchDetail) return;
     const entryfee = parseInt(matchDetail.matchEntryFree);
+    match.matchParticipants = match.matchParticipants + 1;
+    await match.save();
     const client = await Client.findOne({ customerId: customerId});
     if(!client) return;
     const walletBalance = parseInt(client.walletBalance); 
     const updatedBalance = parseInt(walletBalance - entryfee);
     client.walletBalance = updatedBalance;
    const client = await client.save();
-   await updateParticipants(matchId);
     console.log(updatedBalance);
 }
 //END
@@ -91,8 +92,6 @@ async function updateMatchStatus(matchId){
 //START
 async function updateParticipants(matchId){
     const match = await MatchDetail.findOne({ matchId: matchId});
-    match.matchParticipants = match.matchParticipants + 1;
-    await match.save();
   }
 //THE END
 
