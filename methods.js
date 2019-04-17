@@ -9,6 +9,7 @@ const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
 
 //START
 async function updateWallet(matchId, customerId){
+    console.log(matchId, customerId);
     let matchDetail = await MatchDetail.findOne({ matchId: matchId});
     if(!matchDetail) {
         console.log('notfound match');
@@ -25,8 +26,9 @@ async function updateWallet(matchId, customerId){
         const walletBalance = client.walletBalance; 
         const updatedBalance = walletBalance - entryfee;
         client.walletBalance = updatedBalance;
-        await client.save();
-        console.log(client);
+        const response =await client.save();
+        console.log(response);
+         return response;
         }
     }
    

@@ -15,10 +15,7 @@ router.get('/', auth, async (req, res) => {
   });
 
   router.post('/',auth, async (req, res) => {
-    //Validate request body
-//  console.log(req.body);
     const validation = validate(req);
-    //  console.log(validation.error.details[0].message);
      if(validation.error){
          //400 bad request
          res.status(400).send(validation.error.details[0].message);   
@@ -31,8 +28,8 @@ router.get('/', auth, async (req, res) => {
    try{
      participants = await participants.save();
      console.log(participants);
-     await updateWallet(participants.matchId, participants.customerId);
-     res.status(200).send('JOINED SUCCESSFULLY');
+     const response = await updateWallet(participants.matchId, participants.customerId);
+     res.status(200).send(response);
    }
    catch(ex){
      for(field in ex.error){
