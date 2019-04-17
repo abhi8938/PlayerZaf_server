@@ -24,7 +24,7 @@ async function updateWallet(matchId, customerId){
             return
         }else{
         const Balance = client.walletBalance; 
-        console.log(`client:${Balance} updated:${updatedBalance} entryfee:${entryfee}`);
+        console.log(`client:${Balance} entryfee:${entryfee}`);
         const response = await client.save();
         console.log(`response:${response}`);
          return response;
