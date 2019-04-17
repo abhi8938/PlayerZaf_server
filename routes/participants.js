@@ -29,7 +29,7 @@ router.get('/', auth, async (req, res) => {
      participants = await participants.save();
     //  console.log(participants);
      const response = await updateWallet(participants.matchId, participants.customerId);
-     res.status(200).send(response);
+     res.status(200).send('JOINED SUCCESSFULLY');
    }
    catch(ex){
      for(field in ex.error){
