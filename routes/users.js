@@ -56,8 +56,8 @@ router.put('/balance',auth, async (req, res) =>{
     const updatedBalance = req.body.walletBalance;
 
     client.walletBalance = updatedBalance;
-    const result= await client.save();
-    res.send(result);
+     await client.save();
+    res.status(200).send('JOINED SUCCESSFULLY');
   })
 
 // create put route handler to update firstName, lastName, mobileNumber

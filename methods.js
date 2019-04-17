@@ -6,6 +6,24 @@ const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
 const { Client } = require('./models/client');
 const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
+
+//START
+async function updateWallet(matchId, customerId){
+    const matchDetail = await MatchDetail.findOne({ matchId: matchId});
+    if(!matchDetail) return;
+    const entryfee = parseInt(matchDetail.matchEntryFree);
+    const client = await Client.findOne({ customerId: customerId});
+    if(!client) return;
+    const walletBalance = parseInt(client.walletBalance); 
+    const updatedBalance = parseInt(walletBalance - entryfee);
+    client.walletBalance = updatedBalance;
+   const client = await client.save();
+   const response = await updateParticipants(matchId);
+    console.log(client);
+   return response;
+}
+//END
+
 //START
 async function generateToken(orderId, amount){
     // console.log(`tokenpara:${orderId}+ ${amount}`);
@@ -72,11 +90,12 @@ async function updateMatchStatus(matchId){
 //THE END
 
 //START
-async  function updateParticipants(matchId){
+async function updateParticipants(matchId){
     const match = await MatchDetail.findOne({ matchId: matchId});
     match.matchParticipants = match.matchParticipants + 1;
     await match.save();
-   return match;
+    const success = 'JOINED SUCCESSFULLY';
+   return success;
   }
 //THE END
 
@@ -233,3 +252,4 @@ async function updateWinnings(result){
   exports.updateMatchStatus = updateMatchStatus;
   exports.sendResetMessage = sendResetMessage;
   exports.generateToken = generateToken;
+  exports.updateWallet = updateWallet;
