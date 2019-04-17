@@ -17,7 +17,8 @@ async function updateWallet(matchId, customerId){
     }else{
         const entryfee = matchDetail.matchEntryFree;
         matchDetail.matchParticipants = matchDetail.matchParticipants + 1;
-        await matchDetail.save();
+        const result = await matchDetail.save();
+        console.log(result);
         let client = await Client.findOne({ customerId: customerId});
         if(!client) {
             console.log('not found client');
