@@ -19,11 +19,11 @@ async function updateWallet(matchId, customerId){
         matchDetail.matchParticipants = matchDetail.matchParticipants + 1;
         const result = await matchDetail.save();
         let client = await Client.findOne({ customerId: customerId});
+        console.log(`client:${client}`);
         if(!client) {
             console.log('not found client');
             return
         }else{
-            console.log(`client:${client}`);
         const walletBalance = client.walletBalance; 
         const updatedBalance = walletBalance - entryfee;
         client.walletBalance = updatedBalance;
