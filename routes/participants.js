@@ -27,7 +27,7 @@ router.get('/', auth, async (req, res) => {
  
    try{
      participants = await participants.save();
-     console.log(participants);
+    //  console.log(participants);
      const response = await updateWallet(participants.matchId, participants.customerId);
      res.status(200).send(response);
    }
