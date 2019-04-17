@@ -9,18 +9,27 @@ const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
 
 //START
 async function updateWallet(matchId, customerId){
-    var matchDetail = await MatchDetail.findOne({ matchId: matchId});
-    if(!matchDetail) return;
-    const entryfee = matchDetail.matchEntryFree;
-    matchDetail.matchParticipants = matchDetail.matchParticipants + 1;
-    await matchDetail.save();
-    var client = await Client.findOne({ customerId: customerId});
-    if(!client) return;
-    const walletBalance = client.walletBalance; 
-    const updatedBalance = walletBalance - entryfee;
-    client.walletBalance = updatedBalance;
-    await client.save();
-    console.log(client);
+    let matchDetail = await MatchDetail.findOne({ matchId: matchId});
+    if(!matchDetail) {
+        console.log('notfound match');
+        return
+    }else{
+        const entryfee = matchDetail.matchEntryFree;
+        matchDetail.matchParticipants = matchDetail.matchParticipants + 1;
+        await matchDetail.save();
+        let client = await Client.findOne({ customerId: customerId});
+        if(!client) {
+            console.log('not found client');
+            return
+        }else{
+        const walletBalance = client.walletBalance; 
+        const updatedBalance = walletBalance - entryfee;
+        client.walletBalance = updatedBalance;
+        await client.save();
+        console.log(client);
+        }
+    }
+   
 }
 //END
 

@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/me', auth,  async (req, res, next) => {
    const client = await Client.findById(req.client._id).select('-password');
-   console.log(client);
+  //  console.log(client);
    res.send(client);
   
   });
