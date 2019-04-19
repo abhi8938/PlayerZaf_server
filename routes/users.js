@@ -26,8 +26,9 @@ router.post('/', async (req, res) => {
      return count;
    });
    const { error } = validate(req);
+   console.log(error);
    if (error) return res.status(400).send(error.details[0].message);
-  
+
    let client = await Client.findOne({ emailAddress: req.body.emailAddress });
    if(client) return res.status(400).send('emailAddress already exist');
 
