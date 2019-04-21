@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
 
   router.get('/count', auth, async (req, res) => {
     const transactions = await Transaction.estimatedDocumentCount();
-    console.log(transactions);  
+    // console.log(transactions);  
     res.send(transactions.toString());
   });  
 

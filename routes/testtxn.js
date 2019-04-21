@@ -93,7 +93,7 @@ return checksum.genchecksumbystring(checkString, "F_F#bnxKhtfH41jy", function (e
               return error;
             }else{
               const resp1 = JSON.parse(response.body);
-              // console.log(resp1);
+              console.log(resp1);
               return res.send(resp1);
             }
           });
