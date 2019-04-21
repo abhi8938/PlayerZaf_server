@@ -52,7 +52,7 @@ var finalstring = JSON.stringify(samarray);
                 console.log(error);
             } else {
               var resp = JSON.parse(response.body);
-              console.log(resp);
+              // console.log(resp);
               setTimeout(function(){
               return checkTXN(resp,res);
               }, 8000);

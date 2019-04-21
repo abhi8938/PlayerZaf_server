@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
 
   router.get('/count', auth, async (req, res) => {
     const transactions = await Transaction.estimatedDocumentCount();
-    // console.log(transactions);  
+    console.log(transactions);  
     res.send(transactions.toString());
   });  
 
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
  
    try{
      transactions = await transactions.save();
-  //  console.log(result);
+   console.log(transactions, req.body);
      res.send(transactions);
    }
    catch(ex){
