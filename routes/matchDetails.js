@@ -22,7 +22,7 @@ router.get('/ongoing', auth, async (req, res) => {
   res.send(matchdetails);
 });
 
-router.post('/', [auth,admin], async (req, res) => {
+router.post('/',  async (req, res) => {
    //Validate request body
    const validation = validate(req);
    //  console.log(validation.error.details[0].message);
@@ -34,16 +34,10 @@ router.post('/', [auth,admin], async (req, res) => {
    let matchdetails = await MatchDetail.findOne({ matchId: req.body.matchId})
    if(matchdetails) return res.status(400).send('Duplicate MatchId')
    matchdetails = new MatchDetail(addMatchDetail(req));
-
-  try{
-    matchdetails = await matchdetails.save();
+    console.log(`response:${matchdetails}`);
+    matchdetails = await matchdetails.save();    
     res.status(200).send(`MATCH ADDED: ${matchdetails.matchId}`);
-  }
-  catch(ex){
-    for(field in ex.error){
-      console.log(ex.errors[field]);
-    }
-  }
+  
 });
 
 function addMatchDetail(req){

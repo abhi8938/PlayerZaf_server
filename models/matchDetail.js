@@ -15,6 +15,7 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 matchEntryFee: Number,
                 matchType:{ 
                     type:String,
+                    uppercase:true,
                     enum:[ 'SQUAD', 'DUO', 'SOLO']
                 },
                 matchVersion: String,
@@ -38,11 +39,11 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 matchWinPrize: Joi.number().min(10).max(5000).required(),
                 matchPerkill: Joi.number().min(5).max(300).required(),
                 matchEntryFee: Joi.number().min(0).max(400).required(),
-                matchType: Joi.string().min(2).required(),
+                matchType: Joi.string().min(2).required().uppercase(),
                 matchVersion: Joi.string().min(3).required(),
                 matchMap: Joi.string().min(2).required(),
                 matchParticipants: Joi.number(),
-                matchStatus: Joi.string()  
+                matchStatus: Joi.string().uppercase()  
                 };
             
                 return Joi.validate(req.body, schema);
