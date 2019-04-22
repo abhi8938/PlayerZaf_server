@@ -26,6 +26,7 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 },
                 matchStatus:{
                     type:String ,
+                    uppercase:true,
                     enum: [ 'OPEN', 'COMPLETED', 'ONGOING'],
                     default: 'OPEN'
                 }
