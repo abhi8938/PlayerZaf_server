@@ -2,6 +2,7 @@ var checksum = require('../models/utility/checksum');
 var http = require('http');
 const auth = require('../middleWare/auth');
 // const admin = require('../middleWare/admin');
+const { addTransaction } = require('../methods');
 var request = require('request');
 
 module.exports = function (app) {
@@ -88,12 +89,14 @@ return checksum.genchecksumbystring(checkString, "F_F#bnxKhtfH41jy", function (e
               'checksumhash': result
                },
             body:checkString
-          }, function(error, response, body){
+          }, async function(error, response, body){
             if(error){
+              console.log(error);
               return error;
             }else{
               const resp1 = JSON.parse(response.body);
               console.log(resp1);
+              // const result = await addTransaction(resp1);
               return res.send(resp1);
             }
           });

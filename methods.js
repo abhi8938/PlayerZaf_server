@@ -6,7 +6,11 @@ const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
 const { Client } = require('./models/client');
 const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
+//START
+async function addTransaction(resp){
 
+}
+//END
 //START
 async function updateWallet(matchId, customerId){
     // console.log(matchId, customerId);
@@ -260,3 +264,4 @@ async function updateWinnings(result){
   exports.sendResetMessage = sendResetMessage;
   exports.generateToken = generateToken;
   exports.updateWallet = updateWallet;
+  exports.addTransaction = addTransaction;
