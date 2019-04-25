@@ -128,6 +128,28 @@ router.put('/resetPassword', async (req, res) => {
   }
 });
 
+//create app update notification handler
+router.put('/update', async (req, res) => {
+  if(req.body.update == true){
+const clients = await Client.find();
+await clients.forEach(client=> {
+   client.update = req.body.update;
+   client.version = req.body.version;
+   client.save();
+ });
+ res.send('client Updated');
+}else if(req.body.update == false ){
+  const client = await Client.findOne({ userName: req.body.userName});
+  if(!client) {
+    return res.status(404).json('no user exists in db to update');
+  }
+  client.update = req.body.update;
+  await client.save();
+  res.send('App Updated');
+}
+});
+
+
 
 function addClient(req, count){
   console.log('size:' + count);

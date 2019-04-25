@@ -74,6 +74,13 @@ const clientSchema = new mongoose.Schema({
     resetPasswordExpires:{
         type:Number,
         default:null
+    },
+    update:{
+        type:Boolean,
+        default:false
+    },
+    version:{
+        type:String
     }
 });
 
@@ -101,7 +108,9 @@ function validateClient(req){
        matchesPlayed: Joi.number(),
        promoCode: Joi.string(),
        resetPasswordToken: Joi.string(),
-       resetPasswordExpires: Joi.number()
+       resetPasswordExpires: Joi.number(),
+       update:Joi.boolean(),
+       version: Joi.string()
     };
 
     return Joi.validate(req.body, schema);
