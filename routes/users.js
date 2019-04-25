@@ -145,7 +145,7 @@ await clients.forEach(client=> {
   }
   client.update = req.body.update;
   await client.save();
-  res.send('App Updated');
+  res.send('Please download and install');
 }
 });
 
