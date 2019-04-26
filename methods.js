@@ -69,7 +69,7 @@ async function deductMoney(customerId, Amount){
     if(!client) return `Oops! Something Went Wrong`;
     const walletBalance = client.walletBalance;
     client.walletBalance = walletBalance - Amount;
-    console.log(walletBalance, client.walletBalance);
+    console.log(walletBalance, client.walletBalance, Amount);
     client = await client.save();
     return client;
 }
