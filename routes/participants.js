@@ -26,18 +26,10 @@ router.get('/', auth, async (req, res) => {
      participants = await Participant.findOne({ matchId:req.body.matchId, playerName:req.body.playerName });
      if(participants) return res.status(400).send('player already registered');
      participants = new Participant(addParticipantDetail(req));
- 
-   try{
      participants = await participants.save();
-    //  console.log(participants);
+     console.log(participants);
      const response = await updateWallet(participants.matchId, participants.customerId);
      res.status(200).send('JOINED SUCCESSFULLY');
-   }
-   catch(ex){
-     for(field in ex.error){
-       console.log(ex.errors[field]);
-     }
-   }
  });
 
 
