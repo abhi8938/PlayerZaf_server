@@ -8,7 +8,7 @@ var request = require('request');
 module.exports = function (app) {
 
  
- app.get('/withdraw', async function(req,res){
+ app.get('/withdraw', auth, async function(req,res){
   const TxnId = await countTransactions();
   console.log(`TxnId:${TxnId}`);
 var samarray = new Array();
