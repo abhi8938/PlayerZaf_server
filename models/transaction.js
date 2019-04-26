@@ -12,7 +12,7 @@ const transactionSchema = new mongoose.Schema({
         type:String
        },
        TxnDate:{
-           type:String,
+           type:Date
        },
        Amount:{
            type:Number
@@ -38,7 +38,7 @@ function validateTransaction(req){
         TxnId: Joi.string().required(),
         Amount: Joi.number().min(5).required(),
         TxnStatus: Joi.string().required(),
-        TxnDate: Joi.string().required(),
+        TxnDate: Joi.date().required(),
         TxnType: Joi.string().required()
     };
 

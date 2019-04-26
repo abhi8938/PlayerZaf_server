@@ -1,14 +1,77 @@
 const CryptoJS = require("crypto-js");
 const unirest = require('unirest');
 const axios = require('axios');
+const { Transaction } = require('./models/transaction');
 const { MatchDetail } = require('./models/matchDetail');
 const { Participant } = require ('./models/participant');
 const { Result } = require('./models/result');
 const { Client } = require('./models/client');
 const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
-//START
-async function addTransaction(resp){
 
+//START
+async function countTransactions(){
+//TODO: Generate TxnId consecutive
+const count = await Transaction.estimatedDocumentCount();
+const sum = parseInt(count);
+const txnid = `TXNN-${sum + 1}`;
+console.log(`sum${sum}`);
+return txnid;
+}
+//END
+//START
+async function addTransactions(resp, txnId, customerId){
+
+      //TODO: if Successfull deduct money from wallet and show alert and addtransaction 
+       if(resp.response.txnList[0].status == 1){
+           //callfunction addTransaction() and pass parameters
+           const Amount = resp.response.txnList[0].txnAmount;
+           const TxnStatus = resp.response.txnList[0].message;
+           const TxnDate = Date.now();
+           const TxnType = 'WITHDRAWN';
+           let transactions = new Transaction({
+            //TODO: handlepost request
+            customerId: customerId,
+            TxnId: txnId,
+            Amount: Amount,
+            TxnStatus: TxnStatus,
+            TxnDate:TxnDate,
+            TxnType: TxnType
+  
+      })
+      transactions = await transactions.save();
+      const result = await deductMoney(customerId, Amount);
+           console.log(result);
+           return `Transaction ${transactions.TxnStatus}`;
+       }else{
+           //TODO: if not successfull alert error
+           const Amount = resp1.response.txnList[0].txnAmount;
+           const TxnStatus = 'FAILED';
+           const TxnDate = Date.now();
+           const TxnType = 'WITHDRAWN';
+           let transactions = new Transaction({
+            //TODO: handlepost request
+            customerId: customerId,
+            TxnId: txnId,
+            Amount: Amount,
+            TxnStatus: TxnStatus,
+            TxnDate:TxnDate,
+            TxnType: TxnType
+  
+      })
+      transactions = await transactions.save();
+           return`Transaction ${transactions.TxnStatus}`;
+       }
+}
+//END
+//START
+async function deductMoney(customerId, Amount){
+    let client = await Client.findOne({ customerId:customerId});
+    if(!client) return `Oops! Something Went Wrong`;
+    const walletBalance = client.walletBalance;
+    client.walletBalance = walletBalance - Amount;
+    console.log(walletBalance, client.walletBalance);
+    client = await client.save();
+    return client;
 }
 //END
 //START
@@ -264,4 +327,5 @@ async function updateWinnings(result){
   exports.sendResetMessage = sendResetMessage;
   exports.generateToken = generateToken;
   exports.updateWallet = updateWallet;
-  exports.addTransaction = addTransaction;
+  exports.addTransactions = addTransactions;
+  exports.countTransactions = countTransactions;

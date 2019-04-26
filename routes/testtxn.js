@@ -2,12 +2,15 @@ var checksum = require('../models/utility/checksum');
 var http = require('http');
 const auth = require('../middleWare/auth');
 // const admin = require('../middleWare/admin');
-const { addTransaction } = require('../methods');
+const { addTransactions, countTransactions } = require('../methods');
 var request = require('request');
 
 module.exports = function (app) {
 
- app.get('/withdraw',auth, function(req,res){
+ 
+ app.get('/withdraw', async function(req,res){
+  const TxnId = await countTransactions();
+  console.log(`TxnId:${TxnId}`);
 var samarray = new Array();
 
 samarray = 
@@ -20,7 +23,7 @@ samarray =
   "payeeEmailId":null,
   "payeePhoneNumber":req.headers.paytmnumber,
   "payeeSsoId":null,
-  "merchantOrderId":req.headers.txnid,
+  "merchantOrderId":TxnId,
   "appliedToNewUsers":"N",
   "amount":req.headers.amount,
   "currencyCode":"INR",
@@ -49,14 +52,14 @@ var finalstring = JSON.stringify(samarray);
             body: finalstring//Set the body as a string
             },function(error, response, body){
             if(error) {
-                res.send(error);
+               return res.status(400).send(error);
                 console.log(error);
             } else {
               var resp = JSON.parse(response.body);
-              // console.log(resp);
+              // console.log(`resp:${resp}`);
               setTimeout(function(){
-              return checkTXN(resp,res);
-              }, 8000);
+              return checkTXN(resp,res,req);
+              }, 5000);
             }
                 });
         });
@@ -64,7 +67,7 @@ var finalstring = JSON.stringify(samarray);
 // vidisha code finish
 };
 
-function checkTXN(resp, res){
+function checkTXN(resp, res,req){
   // console.log(resp.orderId);
 var check = {
   "request":{ 
@@ -92,12 +95,13 @@ return checksum.genchecksumbystring(checkString, "F_F#bnxKhtfH41jy", function (e
           }, async function(error, response, body){
             if(error){
               console.log(error);
-              return error;
+              return res.status(400).send(error);
             }else{
               const resp1 = JSON.parse(response.body);
-              console.log(resp1.txnList);
-              // const result = await addTransaction(resp1);
-              return res.send(resp1);
+              // console.log(resp1.response.txnList[0]);
+              const result = await addTransactions(resp1, resp1.response.txnList[0].merchantOrderId, req.headers.customerid);
+              console.log(result);
+              return res.status(200).send(result);
             }
           });
         });
