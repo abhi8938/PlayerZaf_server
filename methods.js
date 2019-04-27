@@ -132,22 +132,23 @@ async function generateToken(orderId, amount){
 async function sendResetMessage(token, clientNumber){
     const resetMessage = `Click the link to reset your PlayerZaf App Password:\n http://playerzaf.com/dashboard/#/reset/?token=${token}`;
     var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
-req.query({
-    "authorization": Api,
-    "sender_id": "PLAYER",
-    "message": resetMessage,
-    "language": "english",
-    "route": "t",
-    "numbers": clientNumber,
-  });
-  
-  req.headers({
-    "cache-control": "no-cache"
-  });
+
+    req.headers({
+        "cache-control": "no-cache",
+      });
+    
+    req.query({
+        "authorization": Api,
+        "sender_id": "PLAYER",
+        "message": resetMessage,
+        "language": "english",
+        "route": "t",
+        "numbers": clientNumber,
+      });
+ 
   
   
   req.end(function (res) {
-    if (res.error) throw new Error(res.error);
     if(res.body.return == true){
         return res.body.message
     }else{
@@ -223,6 +224,11 @@ participants.map( (element) =>{
 const numberString = numbers.toString();
 console.log(numberString);
 var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+
+req.headers({
+    "cache-control": "no-cache",
+  });
+
 req.query({
     "authorization": Api,
     "sender_id": "PLAYER",
@@ -231,12 +237,7 @@ req.query({
     "route": "t",
     "numbers": numberString,
   });
-  
-  req.headers({
-    "cache-control": "no-cache"
-  });
-  
-  
+
   req.end(function (res) {
     if(res.body.return == true){
         return res.body.message
@@ -280,16 +281,21 @@ async function updatePlayerStats(customerId, winnings, kills){
 
 
 async function updateWinnings(result){
-    //get result and match details:::::::::::gathering information
-    const matchDetail = await MatchDetail.findOne({matchId: result.matchId});  
+
+//get result and match details:::::::::::gathering information
+
+const matchDetail = await MatchDetail.findOne({matchId: result.matchId});  
     
-     // extracting valuable information
-    const winPrize = matchDetail.matchWinPrize;
-    const perKill = matchDetail.matchPerkill;
+// extracting valuable information
+
+const winPrize = matchDetail.matchWinPrize;
+
+const perKill = matchDetail.matchPerkill;
   
-    const playerResults = result.playerResults;
+
+const playerResults = result.playerResults;
      
-    // foreach playerResult calculate and add winnings to playerResult.winnings
+// foreach playerResult calculate and add winnings to playerResult.winnings
   
     playerResults.forEach(element => {
         if(matchDetail.matchType == 'SOLO'){

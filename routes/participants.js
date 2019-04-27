@@ -22,7 +22,7 @@ router.get('/', auth, async (req, res) => {
      }
 
      let participants = await Participant.findOne({ matchId:req.body.matchId, customerId:req.body.customerId });
-     if(participants) return res.status(400).send('player already registered');
+     if(participants) return res.status(400).send('customer already registered');
      participants = await Participant.findOne({ matchId:req.body.matchId, playerName:req.body.playerName });
      if(participants) return res.status(400).send('player already registered');
      participants = new Participant(addParticipantDetail(req));

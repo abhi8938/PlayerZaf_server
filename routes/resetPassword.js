@@ -15,14 +15,15 @@ const router = express.Router();
         emailAddress:req.body.email
     }).then( async client => {
       if(client == null){
-      console.log('email not in db');
+      // console.log('email not in db');
       return res.send('email not in db');
     }else {
       const token = crypto.randomBytes(20).toString('hex');
-      console.log(token);
+      // console.log(token);
       client.resetPasswordToken = token;
       client.resetPasswordExpires = Date.now() + 360000
      const messageStatus = await sendResetMessage(token, client.mobileNumber);
+     console.log(messageStatus.body);
        if(messageStatus.body.return == true){
          await client.save();
         //  console.log(client);

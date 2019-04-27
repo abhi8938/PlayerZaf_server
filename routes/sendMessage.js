@@ -17,6 +17,7 @@ const { sendBulkMessage } = require('../methods');
 
     //  console.log(req.body);
     const messageStatus = await sendBulkMessage(req.body)
+    console.log(messageStatus.body)
      res.status(200).send(messageStatus.body.message[0]);
  });
 
