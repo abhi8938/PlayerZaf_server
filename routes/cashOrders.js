@@ -61,7 +61,7 @@ function addOrder(req, count){
         customer_Id: req.body.customer_Id,
         amount: req.body.amount,
         currency: 'INR',
-        orderId: `ORDERS-${count}`,
+        orderId: `TXNN-${count}`,
         customerEmailId: req.body.customerEmailId,
         customerMobile: req.body.customerMobile,
         created_at:Date.now()
