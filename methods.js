@@ -118,7 +118,7 @@ async function generateToken(orderId, amount){
       });
       
       req.end(function (res) {
-        if (res.error) throw new Error(res.error);
+        if (res.error) return res.error
         if(res.body.status == 'OK'){
             return res.body.cftoken
         }else{
@@ -178,10 +178,10 @@ async function updateParticipants(matchId){
 async  function addMoneyWallet(customer_Id, amount){
     const success = 'Payment Successfull: Wallet Updated'
     const client = await Client.findOne({ customerId: customer_Id});
-    if(!client) return;
+    if(!client) return ;
     client.walletBalance = client.walletBalance + amount;
     await client.save();
-    console.log(`balance:${client}`);
+    console.log(`balance:${client.walletBalance}`);
     return client;
     }
 //THE END

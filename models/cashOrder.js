@@ -36,8 +36,7 @@ const orderSchema = new mongoose.Schema({
           required:true
     },
     created_at:{
-        type:Number,
-        default:Date.now()
+        type:Date
     }
 
 });
@@ -56,7 +55,7 @@ function validateOrder(req){
         status: Joi.string(),
         customerEmailId: Joi.string().required(),
         customerMobile: Joi.string().min(10).required(),
-        created_at: Joi.number()
+        created_at: Joi.date()
     };
 
     return Joi.validate(req.body, schema);

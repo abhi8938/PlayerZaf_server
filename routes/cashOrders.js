@@ -3,7 +3,7 @@ const auth = require('../middleWare/auth');
 const { CashOrder, validate } = require('../models/cashOrder');
 const express = require('express');
 const router = express.Router();
-const { generateToken } = require('../methods');
+const { generateToken, addMoneyWallet } = require('../methods');
 
 router.get('/', async (req, res) => {
   const cashOrders = await CashOrder.find();
@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   res.send(cashOrders);
 });
 
-router.post('/',auth, async (req, res) => {
+router.post('/', async (req, res) => {
   let count;
   await CashOrder.collection.countDocuments({}, (error, size)=>{
     if(error) throw error;
@@ -25,29 +25,33 @@ router.post('/',auth, async (req, res) => {
     }
     let cashOrders = await CashOrder.find();
    cashOrders = new CashOrder(addOrder(req,count));
-  try{
-    cashOrders = await cashOrders.save();
     //call generate token api with data to get token
     const token = await generateToken(cashOrders.orderId, cashOrders.amount);
     //send token and order id in response
+    cashOrders = await cashOrders.save();
     const response = {
         Token: token.body.cftoken,
-        orderId: cashOrders.orderId
+        orderId: cashOrders.orderId,
+        amount: cashOrders.amount
     }
     res.send(response);
-  }
-
-  catch(ex){
-    for(field in ex.error){
-      console.log(ex.errors[field]);
-    }
-  }
 });
 
 
-router.put('/',auth, async (req, res) => {
+router.put('/', async (req, res) => {
 //find the order with orderId and update with data received in response
-
+   let order = await CashOrder.findOne({ orderId: req.body.orderId })
+   if(!order) return res.status(400).send('Order Not Found, Try Again');
+   order.status = req.body.status;
+  order = await order.save();
+   if(order.status == 'FAILED'){
+    //  console.log(order);
+     res.send(order);
+   }else{
+    await addMoneyWallet(order.customer_Id,order.amount);
+    res.send(order);
+   }
+  
 })
 
 
@@ -60,6 +64,7 @@ function addOrder(req, count){
         orderId: `ORDERS-${count}`,
         customerEmailId: req.body.customerEmailId,
         customerMobile: req.body.customerMobile,
+        created_at:Date.now()
   }
   return addedOrder;
 }
