@@ -20,8 +20,8 @@ router.get('/me', auth,  async (req, res, next) => {
 router.post('/', async (req, res) => {
    
   let count;
-  await Client.collection.countDocuments({}, (error, size)=>{
-    if(error) throw error;
+  await Client.estimatedDocumentCount({}, (error, size)=>{
+    if(error) return res.status(400).send('customer id not generated please try again');
     count = size + 1; 
      return count;
    });

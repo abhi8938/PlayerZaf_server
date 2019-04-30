@@ -7,24 +7,24 @@ const { generateToken, addMoneyWallet } = require('../methods');
 
 router.get('/', async (req, res) => {
   const cashOrders = await CashOrder.find();
-  console.log(cashOrders);
+  // console.log(cashOrders);
   res.send(cashOrders);
 });
 
 router.post('/', async (req, res) => {
   let count;
-  await CashOrder.collection.countDocuments({}, (error, size)=>{
-    if(error) throw error;
-    count = size + 1; 
+  await CashOrder.estimatedDocumentCount({}, (error, size)=>{
+    if(error) return res.status(400).send('order id not generated please try again')
+     count = size + 1; 
      return count;
    });
    const validation = validate(req);
     if(validation.error){
         //400 bad request
-        res.status(400).send(validation.error.details[0].message);   
+       return res.status(400).send(validation.error.details[0].message);   
     }
     let cashOrders = await CashOrder.find();
-   cashOrders = new CashOrder(addOrder(req,count));
+    cashOrders = new CashOrder(addOrder(req,count));
     //call generate token api with data to get token
     const token = await generateToken(cashOrders.orderId, cashOrders.amount);
     //send token and order id in response
@@ -43,7 +43,7 @@ router.put('/', async (req, res) => {
    let order = await CashOrder.findOne({ orderId: req.body.orderId })
    if(!order) return res.status(400).send('Order Not Found, Try Again');
    order.status = req.body.status;
-  order = await order.save();
+   order = await order.save();
    if(order.status == 'FAILED'){
     //  console.log(order);
      res.send(order);
@@ -51,7 +51,6 @@ router.put('/', async (req, res) => {
     await addMoneyWallet(order.customer_Id,order.amount);
     res.send(order);
    }
-  
 })
 
 
