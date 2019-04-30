@@ -38,8 +38,14 @@ router.post('/', async (req, res) => {
 });
 
 
+router.put('/update', async (req, res) => {
+  //find the order with orderId and update with data received in response
+   res.status(400).send('Transaction Failed due to network Error');
+  })
+  
 router.put('/', async (req, res) => {
 //find the order with orderId and update with data received in response
+   console.log(req.body);
    let order = await CashOrder.findOne({ orderId: req.body.orderId })
    if(!order) return res.status(400).send('Order Not Found, Try Again');
    order.status = req.body.status;
