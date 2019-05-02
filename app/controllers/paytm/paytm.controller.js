@@ -6,9 +6,10 @@ module.exports = {
          res.render("paytm/index");
     },
     request: (req, res) =>{
+     
          var paramlist = req.body;
          var paramarray = new Array();
-           console.log(paramlist);
+           console.log(`paramlist:${paramlist}`);
          for(name in paramlist) {
              if( name === "PAYTM_MERCHANT_KEY"){
                  var PAYTM_MERCHANT_KEY = paramlist[name];
