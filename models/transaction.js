@@ -38,8 +38,8 @@ function validateTransaction(req){
         TxnId: Joi.string().required(),
         Amount: Joi.number().min(5).required(),
         TxnStatus: Joi.string().required(),
-        TxnDate: Joi.date().required(),
-        TxnType: Joi.string().required()
+        TxnDate: Joi.date(),
+        TxnType: Joi.string()
     };
 
     return Joi.validate(req.body, schema);
