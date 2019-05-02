@@ -9,7 +9,7 @@ module.exports = {
      
          var paramlist = req.body;
          var paramarray = new Array();
-           console.log(`paramlist:${paramlist}`);
+           console.log(`paramlist:${paramlist.TXN_AMOUNT}`);
          for(name in paramlist) {
              if( name === "PAYTM_MERCHANT_KEY"){
                  var PAYTM_MERCHANT_KEY = paramlist[name];
