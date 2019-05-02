@@ -25,7 +25,7 @@ router.get('/',auth, async (req, res) => {
          //400 bad request
          res.status(400).send(validation.error.details[0].message);   
      }
-  //  let transactions = new Transaction(addTransaction(req));
+   let transactions = new Transaction(addTransaction(req));
  
    
      transactions = await transactions.save();
