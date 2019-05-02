@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 const { addMoneyWallet } = require('../methods');
 
-router.get('/', async (req, res) => {
+router.get('/',auth, async (req, res) => {
     const transactions = await Transaction.find();
     res.send(transactions);
   });
@@ -25,12 +25,18 @@ router.get('/', async (req, res) => {
          //400 bad request
          res.status(400).send(validation.error.details[0].message);   
      }
-   let transactions = new Transaction(addTransaction(req));
+  //  let transactions = new Transaction(addTransaction(req));
  
    try{
      transactions = await transactions.save();
-   console.log(transactions, req.body);
-     res.status(200).send(transactions);
+   console.log(transactions,req.body);
+   if(transactions.TxnStatus == 'SUCCESS'){
+    const response = await addMoneyWallet(transactions.customerId, transactions.Amount);
+    res.status(200).send(response);
+   }else{
+    res.status(400).send('Payment Failed, Please Retry');
+   }
+  
    }
    catch(ex){
      for(field in ex.error){

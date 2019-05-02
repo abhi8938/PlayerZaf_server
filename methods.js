@@ -182,7 +182,7 @@ async  function addMoneyWallet(customer_Id, amount){
     client.walletBalance = client.walletBalance + amount;
     await client.save();
     console.log(`balance:${client.walletBalance}`);
-    return client;
+    return 'Payment Successful';
     }
 //THE END
 
@@ -206,8 +206,6 @@ if(generated_signature == razorpay_signature){
 }}
 
 //THE END
-
-
 async function sendBulkMessage(request){
     const message = `Attention!\n PlayerZaf ${request.matchId} is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
     // find the participant of the match with matchId
