@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
    try{
      transactions = await transactions.save();
    console.log(transactions, req.body);
-     res.send(transactions);
+     res.status(200).send(transactions);
    }
    catch(ex){
      for(field in ex.error){
@@ -47,8 +47,8 @@ function addTransaction(req){
           TxnId: req.body.TxnId,
           Amount: req.body.Amount,
           TxnStatus: req.body.TxnStatus,
-          TxnDate: req.body.TxnDate,
-          TxnType: req.body.TxnType
+          TxnDate: Date.now(),
+          TxnType: 'ADDED'
 
     }
     return addedTransaction;
