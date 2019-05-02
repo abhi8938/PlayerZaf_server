@@ -8,7 +8,7 @@ module.exports = {
     request: (req, res) =>{
          var paramlist = req.body;
          var paramarray = new Array();
-
+           console.log(paramlist);
          for(name in paramlist) {
              if( name === "PAYTM_MERCHANT_KEY"){
                  var PAYTM_MERCHANT_KEY = paramlist[name];

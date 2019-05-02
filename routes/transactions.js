@@ -12,7 +12,7 @@ router.get('/',auth, async (req, res) => {
 
   router.get('/count', auth, async (req, res) => {
     const transactions = await Transaction.estimatedDocumentCount();
-    // console.log(transactions);  
+  
     res.send(transactions.toString());
   });  
 
@@ -20,7 +20,7 @@ router.get('/',auth, async (req, res) => {
     //Validate request body
  
     const validation = validate(req);
-    //  console.log(validation.error.details[0].message);
+  
      if(validation.error){
          //400 bad request
          res.status(400).send(validation.error.details[0].message);   
@@ -29,7 +29,7 @@ router.get('/',auth, async (req, res) => {
  
    
      transactions = await transactions.save();
-   console.log(transactions,req.body);
+
    if(transactions.TxnStatus == 'SUCCESS'){
     const response = await addMoneyWallet(transactions.customerId, transactions.Amount);
     res.status(200).send(response);
