@@ -27,7 +27,7 @@ router.get('/',auth, async (req, res) => {
      }
   //  let transactions = new Transaction(addTransaction(req));
  
-   try{
+   
      transactions = await transactions.save();
    console.log(transactions,req.body);
    if(transactions.TxnStatus == 'SUCCESS'){
@@ -35,13 +35,6 @@ router.get('/',auth, async (req, res) => {
     res.status(200).send(response);
    }else{
     res.status(400).send('Payment Failed, Please Retry');
-   }
-  
-   }
-   catch(ex){
-     for(field in ex.error){
-       console.log(ex.errors[field]);
-     }
    }
  });
 
