@@ -11,6 +11,7 @@ module.exports = function (app) {
  app.get('/withdraw', auth, async function(req,res){
   const TxnId = await countTransactions();
   console.log(`TxnId:${TxnId}`);
+  
 var samarray = new Array();
 
 samarray = 
@@ -23,7 +24,7 @@ samarray =
   "payeeEmailId":null,
   "payeePhoneNumber":req.headers.paytmnumber,
   "payeeSsoId":null,
-  "merchantOrderId":TxnId,
+  "merchantOrderId":'',
   "appliedToNewUsers":"N",
   "amount":req.headers.amount,
   "currencyCode":"INR",
@@ -59,6 +60,7 @@ var finalstring = JSON.stringify(samarray);
               // console.log(`resp:${resp}`);
               setTimeout(function(){
               return checkTXN(resp,res,req);
+
               }, 5000);
             }
                 });
@@ -98,9 +100,6 @@ return checksum.genchecksumbystring(checkString, "F_F#bnxKhtfH41jy", function (e
               return res.status(400).send(error);
             }else{
               const resp1 = JSON.parse(response.body);
-              // console.log(resp1.response.txnList[0]);
-              const result = await addTransactions(resp1, resp1.response.txnList[0].merchantOrderId, req.headers.customerid);
-              console.log(result);
               return res.status(200).send(result);
             }
           });
