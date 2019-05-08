@@ -41,7 +41,7 @@ async function addTransactions(resp, txnId, customerId){
       transactions = await transactions.save();
       const result = await deductMoney(customerId, Amount);
            console.log(result);
-           return `Transaction ${transactions.TxnStatus}`;
+           return result;
        }else{
            //TODO: if not successfull alert error
            const Amount = resp1.response.txnList[0].txnAmount;
@@ -71,7 +71,7 @@ async function deductMoney(customerId, Amount){
     client.walletBalance = walletBalance - Amount;
     console.log(walletBalance, client.walletBalance, Amount);
     client = await client.save();
-    return client;
+    return 'Transaction Success';
 }
 //END
 //START

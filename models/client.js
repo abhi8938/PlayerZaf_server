@@ -42,7 +42,8 @@ const clientSchema = new mongoose.Schema({
     },
     walletBalance:{
         type:Number,
-        default:0
+        default:0,
+        min:0
     },
     customerId:{
         type:String,
@@ -58,7 +59,8 @@ const clientSchema = new mongoose.Schema({
     },
     matchesPlayed:{
         type:Number,
-        default:0
+        default:0,
+        
     },
     isAdmin:{
         type:Boolean,
@@ -101,9 +103,9 @@ function validateClient(req){
        emailAddress: Joi.string().min(5).required().email(),
        mobileNumber: Joi.string().required().min(10).max(10),
        password: Joi.string().min(5).max(255).required(),
-       walletBalance: Joi.number(),
+       walletBalance: Joi.number().positive().min(0),
        customerId: Joi.string(),
-       amountWon: Joi.number(),
+       amountWon: Joi.number().positive().min(0),
        totalKills: Joi.number(),
        matchesPlayed: Joi.number(),
        promoCode: Joi.string(),

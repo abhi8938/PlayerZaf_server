@@ -2,16 +2,21 @@ var checksum = require('../models/utility/checksum');
 var http = require('http');
 const auth = require('../middleWare/auth');
 // const admin = require('../middleWare/admin');
+const { Client } = require('../models/client');
 const { addTransactions, countTransactions } = require('../methods');
 var request = require('request');
 
 module.exports = function (app) {
 
  
- app.get('/withdraw', auth, async function(req,res){
+ app.get('/withdraw',  async function(req,res){
   const TxnId = await countTransactions();
-  console.log(`TxnId:${TxnId}`);
-  
+  const client= await Client.findOne({ customerId:req.headers.customerid })
+  if(!client) return ;
+
+  if(client.walletBalance < req.headers.amount ) {
+    return  res.status(400).send('Not Enough Money');
+    }else{
 var samarray = new Array();
 
 samarray = 
@@ -24,7 +29,7 @@ samarray =
   "payeeEmailId":null,
   "payeePhoneNumber":req.headers.paytmnumber,
   "payeeSsoId":null,
-  "merchantOrderId":'',
+  "merchantOrderId":TxnId,
   "appliedToNewUsers":"N",
   "amount":req.headers.amount,
   "currencyCode":"INR",
@@ -39,7 +44,7 @@ samarray =
 
 
 var finalstring = JSON.stringify(samarray);
- checksum.genchecksumbystring(finalstring, "F_F#bnxKhtfH41jy", function (err, result) 
+ return checksum.genchecksumbystring(finalstring, "F_F#bnxKhtfH41jy", function (err, result) 
         {
             request({
             url: 'https://trust.paytm.in/wallet-web/asyncSalesToUserCredit', //URL to hit
@@ -54,23 +59,23 @@ var finalstring = JSON.stringify(samarray);
             },function(error, response, body){
             if(error) {
                return res.status(400).send(error);
-                console.log(error);
+               
             } else {
               var resp = JSON.parse(response.body);
-              // console.log(`resp:${resp}`);
+              
               setTimeout(function(){
               return checkTXN(resp,res,req);
-
               }, 5000);
             }
                 });
         });
+      }
   });
 // vidisha code finish
 };
 
 function checkTXN(resp, res,req){
-  // console.log(resp.orderId);
+
 var check = {
   "request":{ 
   "requestType":"merchanttxnid", 
@@ -100,6 +105,7 @@ return checksum.genchecksumbystring(checkString, "F_F#bnxKhtfH41jy", function (e
               return res.status(400).send(error);
             }else{
               const resp1 = JSON.parse(response.body);
+              const result = await addTransactions(resp1, resp1.response.txnList[0].merchantOrderId, req.headers.customerid);
               return res.status(200).send(result);
             }
           });
