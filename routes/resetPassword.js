@@ -10,7 +10,7 @@ const router = express.Router();
     if(req.body.email == ''){
       return res.send('email required');
     }
-    console.log(req.body.email);
+
     Client.findOne({
         emailAddress:req.body.email
     }).then( async client => {
@@ -23,8 +23,7 @@ const router = express.Router();
       client.resetPasswordToken = token;
       client.resetPasswordExpires = Date.now() + 360000
      const messageStatus = await sendResetMessage(token, client.mobileNumber);
-     console.log(messageStatus.body);
-       if(messageStatus.body.return == true){
+       if(messageStatus.code == 200){
          await client.save();
         //  console.log(client);
           return res.send('Reset link sent Successfully to your registerd Mobile Number')

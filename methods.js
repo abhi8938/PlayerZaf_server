@@ -131,19 +131,18 @@ async function generateToken(orderId, amount){
 //START
 async function sendResetMessage(token, clientNumber){
     const resetMessage = `Click the link to reset your PlayerZaf App Password:\n http://playerzaf.com/dashboard/#/reset/?token=${token}`;
-    var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+    var req = unirest("GET", "https://www.txtguru.in/imobile/api.php");
 
     req.headers({
         "cache-control": "no-cache",
       });
     
     req.query({
-        "authorization": Api,
-        "sender_id": "PLAYER",
-        "message": resetMessage,
-        "language": "english",
-        "route": "t",
-        "numbers": clientNumber,
+        "username": 'playerzaf.contact' ,
+        "password": "15060138",
+        "source": 'PLAZAF',
+        "dmobile": `91${clientNumber}`,
+        "message":resetMessage
       });
  
   
@@ -216,24 +215,23 @@ const numbers = new Array();
 //    -save all the numbers in an array
 //    -stringify numbers Array 
 participants.map( (element) =>{
-      numbers.push(element.mobileNumber);
+      numbers.push(`91${element.mobileNumber}`);
 })
 //call the api with request body and header
 const numberString = numbers.toString();
 console.log(numberString);
-var req = unirest("GET", "https://www.fast2sms.com/dev/bulk");
+var req = unirest("GET", "https://www.txtguru.in/imobile/api.php");
 
 req.headers({
     "cache-control": "no-cache",
   });
 
 req.query({
-    "authorization": Api,
-    "sender_id": "PLAYER",
-    "message": message,
-    "language": "english",
-    "route": "t",
-    "numbers": numberString,
+    "username": 'playerzaf.contact' ,
+    "password": "15060138",
+    "source": 'PLAZAF',
+    "dmobile": numberString,
+    "message": message
   });
 
   req.end(function (res) {

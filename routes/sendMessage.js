@@ -9,18 +9,17 @@ const { sendBulkMessage } = require('../methods');
   router.post('/', async (req, res) => {
     //Validate request body
     const validation = validate(req);
-    //  console.log(validation.error.details[0].message);
      if(validation.error){
         //400 bad request
          res.status(400).send(validation.error.details[0].message);   
      }
-
-    //  console.log(req.body);
-    const messageStatus = await sendBulkMessage(req.body)
-    console.log(messageStatus.body)
-     res.status(200).send(messageStatus.body.message[0]);
+    const messageStatus = await sendBulkMessage(req.body);
+    if(messageStatus.code == 200){
+     return res.status(200).send('Messages Sent Successfully');
+    }else{
+      return res.status(400).send('Something Went Wrong! Retry');
+    }
  });
-
 
  function validate(req){
     const schema = {
@@ -31,6 +30,15 @@ const { sendBulkMessage } = require('../methods');
 
     return Joi.validate(req.body, schema);
      
+}
+
+function validateOTP(req){
+   const schema = {
+      mobileNumber:Joi.string().min(10).required(),
+   };
+
+   return Joi.validate(req.body, schema);
+    
 }
 
 module.exports = router;

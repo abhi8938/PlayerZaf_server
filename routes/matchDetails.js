@@ -7,18 +7,19 @@ const router = express.Router();
 
 router.get('/open', auth, async (req, res) => {
   const matchdetails = await MatchDetail.find({ matchStatus: 'OPEN'});
-  console.log(matchdetails);
+
   res.send(matchdetails);
 });
 router.get('/completed', auth, async (req, res) => {
-  const matchdetails = await MatchDetail.find({ matchStatus: 'COMPLETED'});
+  const matchdetails = await MatchDetail
+                    .find({ matchStatus: 'COMPLETED'})
+                    .limit(10)
   console.log(matchdetails);
   res.send(matchdetails);
 });
 
 router.get('/ongoing', auth, async (req, res) => {
   const matchdetails = await MatchDetail.find({ matchStatus: 'ONGOING'});
-  console.log(matchdetails);
   res.send(matchdetails);
 });
 

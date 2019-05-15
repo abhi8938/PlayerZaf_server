@@ -83,6 +83,13 @@ const clientSchema = new mongoose.Schema({
     },
     version:{
         type:String
+    },
+    OTP:{
+        type:String
+    },
+    verified:{
+        type:Boolean,
+        default:false
     }
 });
 
@@ -112,7 +119,9 @@ function validateClient(req){
        resetPasswordToken: Joi.string(),
        resetPasswordExpires: Joi.number(),
        update:Joi.boolean(),
-       version: Joi.string()
+       version: Joi.string(),
+       OTP: Joi.string(),
+       verified: Joi.boolean()
     };
 
     return Joi.validate(req.body, schema);
