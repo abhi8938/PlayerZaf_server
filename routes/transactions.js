@@ -5,8 +5,9 @@ const express = require('express');
 const router = express.Router();
 const { addMoneyWallet } = require('../methods');
 
-router.get('/',auth, async (req, res) => {
-    const transactions = await Transaction.find();
+router.get('/', async (req, res) => {
+    const transactions = await Transaction.find({customerId:req.headers.customerid})
+                                          .limit(10)
     res.send(transactions);
   });
 
