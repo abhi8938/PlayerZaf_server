@@ -12,8 +12,7 @@ router.get('/open', auth, async (req, res) => {
 });
 router.get('/completed', auth, async (req, res) => {
   const matchdetails = await MatchDetail
-                    .find({ matchStatus: 'COMPLETED'})
-                    .limit(10)
+                    .find({ matchStatus: 'COMPLETED'});
   console.log(matchdetails);
   res.send(matchdetails);
 });
