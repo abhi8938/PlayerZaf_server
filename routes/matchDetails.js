@@ -15,16 +15,12 @@ router.get('/completed', auth, async (req, res) => {
   const matchdetails = await MatchDetail
                     .find({ matchStatus: 'COMPLETED'})
                     .limit(10);
-             matchdetails.forEach(element => {
-              Participant.findOne({matchId:element.matchId, customerId:req.headers.customerid })
-                .then(response =>
-                    {  
-                        element.Join='JOINED';
-                       })
-                .catch(err =>{
-                       element.Join='NOTJOINED';
-                })
+             matchdetails.forEach(async element => {
+              const participant = await Participant.findOne({matchId:element.matchId, customerId:req.headers.customerid });
+              if(participant) {element.Join = 'JOINED'}
+              else{element.Join = 'NOTJOINED'}
                      });
+                     console.log(matchdetails);
   res.send(matchdetails);
 });
 
