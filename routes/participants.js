@@ -17,6 +17,7 @@ router.get('/', auth, async (req, res) => {
 router.get('/Joined', auth, async (req, res) => {
     const participant = await Participant.findOne({matchId:req.headers.matchid, customerId:req.headers.customerid });
     if(!participant) return res.status(400).send('Not Joined');
+    console.log(participant);
     res.status(200).send('Joined');
   });
 

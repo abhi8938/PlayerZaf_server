@@ -1,6 +1,8 @@
 //This router hanles request for new matchDetails
 const auth = require('../middleWare/auth');
 const admin = require('../middleWare/admin');
+const { Participant} = require('../models/participant');
+
 const { MatchDetail, validate } = require('../models/matchDetail');
 const express = require('express');
 const router = express.Router();
@@ -13,6 +15,16 @@ router.get('/completed', auth, async (req, res) => {
   const matchdetails = await MatchDetail
                     .find({ matchStatus: 'COMPLETED'})
                     .limit(10);
+             matchdetails.forEach(element => {
+              Participant.findOne({matchId:element.matchId, customerId:req.headers.customerid })
+                .then(response =>
+                    {  
+                        element.Join='JOINED';
+                       })
+                .catch(err =>{
+                       element.Join='NOTJOINED';
+                })
+                     });
   res.send(matchdetails);
 });
 
