@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.get('/open', auth, async (req, res) => {
   const matchdetails = await MatchDetail.find({ matchStatus: 'OPEN'});
-
   res.send(matchdetails);
 });
 router.get('/completed', auth, async (req, res) => {
@@ -34,7 +33,6 @@ router.post('/',  async (req, res) => {
    let matchdetails = await MatchDetail.findOne({ matchId: req.body.matchId})
    if(matchdetails) return res.status(400).send('Duplicate MatchId')
    matchdetails = new MatchDetail(addMatchDetail(req));
-    console.log(`response:${matchdetails}`);
     matchdetails = await matchdetails.save();    
     res.status(200).send(`MATCH ADDED: ${matchdetails.matchId}`);
   

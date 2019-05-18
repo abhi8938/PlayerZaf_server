@@ -9,9 +9,15 @@ const { updateWallet } = require('../methods');
 
 router.get('/', auth, async (req, res) => {
     const participants = await Participant.find({matchId:req.headers.matchid});
-    if(participants == [] ) return res.status(400).send('Invalid MatchID');
-    // console.log(req.headers);
+    if(participants == []) return res.status(400).send('Invalid MatchID');
     res.send(participants);
+  });
+
+  
+router.get('/Joined', auth, async (req, res) => {
+    const participant = await Participant.findOne({matchId:req.headers.matchid, customerId:req.headers.customerid });
+    if(!participant) return res.status(400).send('Not Joined');
+    res.status(200).send('Joined');
   });
 
   router.post('/',auth, async (req, res) => {
@@ -31,9 +37,6 @@ router.get('/', auth, async (req, res) => {
 
      participants = new Participant(addParticipantDetail(req));
      participants = await participants.save();
-     
-     console.log(participants);
-     
      const response = await updateWallet(participants.matchId, participants.customerId);
      
      res.status(200).send('JOINED SUCCESSFULLY');
