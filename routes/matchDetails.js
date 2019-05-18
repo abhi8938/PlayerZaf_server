@@ -12,11 +12,12 @@ router.get('/open', auth, async (req, res) => {
   res.send(matchdetails);
 });
 router.get('/completed', auth, async (req, res) => {
-  const matchdetails = await MatchDetail
+  var matchdetails = [];
+  matchdetails = await MatchDetail
                     .find({ matchStatus: 'COMPLETED'})
                     .limit(10);
              matchdetails.forEach(async element => {
-              const participant = await Participant.findOne({matchId:element.matchId, customerId:req.headers.customerid });
+             const participant = await Participant.findOne({matchId:element.matchId, customerId:req.headers.customerid });
               if(participant) {element.Join = 'JOINED'}
               else{element.Join = 'NOTJOINED'}
                      });
