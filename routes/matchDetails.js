@@ -28,28 +28,30 @@ router.get('/completed', async (req, res) => {
               else{ 
                 element.Join = 'NOTJOINED';
               }
-               });       
+               });   
   res.send(result);
 });
 
-router.get('/ongoing', auth, async (req, res) => {
-  const result = new Array();
+router.get('/ongoing',async (req, res) => {
+  var result2 = new Array();
   const matchdetails = await MatchDetail.find({ matchStatus: 'ONGOING'})
                                       .sort({matchId:-1})
                                       .limit(10);
        matchdetails.map( element =>{
-            result.push(element);
-         })     
-         result.map(async element => {
+            result2.push(element);
+         });     
+         result2.map(async element => {  
           const participant = await Participant.findOne({matchId:element.matchId, customerId:req.headers.customerid });
            if(participant){
-                element.Join = 'JOINED';
+                element.Joined = true;           
            }
            else{ 
-             element.Join = 'NOTJOINED';
+             element.Joined = false;
            }
-            });       
-  res.send(result);
+        
+            });  
+            console.log(result2);
+  res.send(result2);
 });
 
 router.post('/',  async (req, res) => {
