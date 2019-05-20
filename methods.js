@@ -209,6 +209,7 @@ async function sendBulkMessage(request){
     const message = `Attention!\n PlayerZaf ${request.matchId} is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
     // find the participant of the match with matchId
 const participants = await Participant.find({ matchId: request.matchId});
+
 const numbers = new Array();
 // for each participant 
 //    -call the messaging api
@@ -219,7 +220,7 @@ participants.map( (element) =>{
 })
 //call the api with request body and header
 const numberString = numbers.toString();
-console.log(numberString);
+
 var req = unirest("GET", "https://www.txtguru.in/imobile/api.php");
 
 req.headers({

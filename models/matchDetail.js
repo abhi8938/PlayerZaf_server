@@ -29,6 +29,12 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                     uppercase:true,
                     enum: [ 'OPEN', 'COMPLETED', 'ONGOING'],
                     default: 'OPEN'
+                },
+                roomId:{
+                    type:String
+                },
+                password:{
+                    type:String
                 }
 }));
      function validateMatchDetail(req){

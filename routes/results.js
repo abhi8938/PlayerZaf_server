@@ -12,12 +12,12 @@ const router = express.Router();
 
 router.get('/', auth, async (req, res, next) => {
   const results = await Result.findOne({ matchId:req.headers.matchid});
-  console.log(results);
+
   res.send(results);
 
 });
 router.post('/', async (req, res) => {
-  // console.log(req.body);
+
   const { error } = validate(req);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -32,11 +32,11 @@ router.post('/', async (req, res) => {
     playerErrors.push(`${error.details[0].message} for playerName ${playerResult.playerName}`);
     }
   });
-  // console.log(playerErrors);
+
   if(playerErrors == null){
     return res.status(400).send(playerErrors.toString());
   }else if(playerErrors != null){
-    // console.log(result);
+
     result = new Result(addResult(req));
   result = await result.save();
   await updateWinnings(result);
