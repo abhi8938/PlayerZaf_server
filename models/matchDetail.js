@@ -50,7 +50,9 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 matchVersion: Joi.string().min(3).required(),
                 matchMap: Joi.string().min(2).required(),
                 matchParticipants: Joi.number(),
-                matchStatus: Joi.string().uppercase()  
+                matchStatus: Joi.string().uppercase(),
+                roomId: Joi.string(),
+                password: Joi.string()  
                 };
             
                 return Joi.validate(req.body, schema);
