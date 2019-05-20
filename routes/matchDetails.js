@@ -15,7 +15,7 @@ router.get('/completed', auth, async (req, res) => {
   var matchdetails = [];
   matchdetails = await MatchDetail
                     .find({ matchStatus: 'COMPLETED'})
-                    .sort({matchId:1})
+                    .sort({matchId:-1})
                     .limit(10);
                     
              matchdetails.forEach(async element => {
