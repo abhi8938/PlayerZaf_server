@@ -21,7 +21,7 @@ router.get('/Joined', auth, async (req, res) => {
     res.status(200).send('Joined');
   });
 
-  router.post('/',auth, async (req, res) => {
+  router.post('/', async (req, res) => {
     const validation = validate(req);
      if(validation.error){
          //400 bad request
@@ -36,9 +36,9 @@ router.get('/Joined', auth, async (req, res) => {
      
      if(participants) return res.status(400).send('player already registered');
 
-     participants = new Participant(addParticipantDetail(req));
-     participants = await participants.save();
-     const response = await updateWallet(participants.matchId, participants.customerId);
+    //  participants = new Participant(addParticipantDetail(req));
+    //  participants = await participants.save();
+    //  const response = await updateWallet(participants.matchId, participants.customerId);
      
      res.status(200).send('JOINED SUCCESSFULLY');
  });
