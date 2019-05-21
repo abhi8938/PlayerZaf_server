@@ -38,6 +38,7 @@ router.get('/Joined', auth, async (req, res) => {
      if(participants) return res.status(400).send('player already registered');
      //fadfsfrff
      participants = new Participant(addParticipantDetail(req));
+    const response =  await updateWallet(participants.matchId, participants.customerId);
      participants = await participants.save();
      
      res.status(200).send('JOINED SUCCESSFULLY');

@@ -94,7 +94,6 @@ async function updateWallet(matchId, customerId){
         const updatedBalance = Balance - entryfee;
         client.walletBalance = updatedBalance;
         const response = await client.save();
-        console.log(`response:${response}`);
          return response;
         }
     }
