@@ -9,6 +9,28 @@ const { Client } = require('./models/client');
 const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
 
 //START
+async function promoCode(customerId){
+    //check if promocode
+    const refer = await Client.findOne({ customerId:customerId});
+    if(refer.promoCode != undefined){
+       refer.walletBalance = refer.walletBalance + 5;
+       const referer = await Client.findOne({ userName: refer.promoCode});
+       if(referer){
+           referer.walletBalance = referer.walletBalance + 10;
+           refer.promoCode = undefined;
+           await refer.save();
+           await referer.save();
+       }else{
+           return
+       }
+    
+    }else{
+        return;
+    }
+        
+}
+//END
+//START
 async function countTransactions(){
 //TODO: Generate TxnId consecutive
 const count = await Transaction.estimatedDocumentCount();
@@ -331,3 +353,4 @@ const playerResults = result.playerResults;
   exports.updateWallet = updateWallet;
   exports.addTransactions = addTransactions;
   exports.countTransactions = countTransactions;
+  exports.promoCode = promoCode;

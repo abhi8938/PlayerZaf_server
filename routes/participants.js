@@ -6,7 +6,7 @@ const { MatchDetail } = require('../models/matchDetail');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-const { updateWallet } = require('../methods');
+const { updateWallet, promoCode } = require('../methods');
 
 router.get('/', auth, async (req, res) => {
     const participants = await Participant.find({matchId:req.headers.matchid});
@@ -18,7 +18,7 @@ router.get('/', auth, async (req, res) => {
 router.get('/Joined', auth, async (req, res) => {
     const participant = await Participant.findOne({matchId:req.headers.matchid, customerId:req.headers.customerid });
     if(!participant) return res.status(400).send('Not Joined');
-    console.log(participant);
+
     res.status(200).send('Joined');
   });
 
@@ -33,14 +33,13 @@ router.get('/Joined', auth, async (req, res) => {
 
      let participants = await Participant.findOne({ matchId:req.body.matchId, customerId:req.body.customerId });
      if(participants) return res.status(400).send('customer already registered');
-     participants = await Participant.findOne({ matchId:req.body.matchId, playerName:req.body.playerName });
-     
+     participants = await Participant.findOne({ matchId:req.body.matchId, playerName:req.body.playerName }); 
      if(participants) return res.status(400).send('player already registered');
      //fadfsfrff
      participants = new Participant(addParticipantDetail(req));
-    const response =  await updateWallet(participants.matchId, participants.customerId);
+     await updateWallet(participants.matchId, participants.customerId);
      participants = await participants.save();
-     
+     await promoCode(participants.customerId);
      res.status(200).send('JOINED SUCCESSFULLY');
  });
 
