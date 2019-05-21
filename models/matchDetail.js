@@ -22,7 +22,8 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 matchMap: String,
                 matchParticipants:{
                      type: Number,
-                     default:0
+                     default:0,
+                     max:100
                 },
                 matchStatus:{
                     type:String ,

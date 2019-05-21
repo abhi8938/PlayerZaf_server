@@ -2,6 +2,7 @@
 const auth = require('../middleWare/auth');
 const admin = require('../middleWare/admin');
 const { Participant, validate} = require('../models/participant');
+const { MatchDetail } = require('../models/matchDetail');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
@@ -27,16 +28,17 @@ router.get('/Joined', auth, async (req, res) => {
          //400 bad request
          res.status(400).send(validation.error.details[0].message);   
      }
+     const matchDetails = await MatchDetail.findOne({ matchId:req.body.matchId});
+     if(matchDetails.matchParticipants >= 100) return res.status(401).send('Match Full');
 
      let participants = await Participant.findOne({ matchId:req.body.matchId, customerId:req.body.customerId });
-     
      if(participants) return res.status(400).send('customer already registered');
-     
      participants = await Participant.findOne({ matchId:req.body.matchId, playerName:req.body.playerName });
      
      if(participants) return res.status(400).send('player already registered');
      //fadfsfrff
-    //  participants = new Participant
+     participants = new Participant(addParticipantDetail(req));
+     participants = await participants.save();
      
      res.status(200).send('JOINED SUCCESSFULLY');
  });

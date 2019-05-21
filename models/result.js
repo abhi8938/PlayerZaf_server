@@ -47,7 +47,7 @@ const Result = mongoose.model('results', resultSchema);
 function validateResult(req){
     const schema = {
        matchId: Joi.string().min(2).required(),
-       playerResults:Joi.array().min(4).max(99)
+       playerResults:Joi.array().min(4).max(100)
     };
 
     return Joi.validate(req.body, schema);
