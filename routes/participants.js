@@ -29,7 +29,7 @@ router.get('/Joined', auth, async (req, res) => {
          res.status(400).send(validation.error.details[0].message);   
      }
      const matchDetails = await MatchDetail.findOne({ matchId:req.body.matchId});
-     if(matchDetails.matchParticipants >= 100) return res.status(401).send('Match Full');
+     if(matchDetails.matchParticipants >= 100) return res.status(400).send('Match Full');
 
      let participants = await Participant.findOne({ matchId:req.body.matchId, customerId:req.body.customerId });
      if(participants) return res.status(400).send('customer already registered');
