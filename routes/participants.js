@@ -22,7 +22,7 @@ router.get('/Joined', auth, async (req, res) => {
     res.status(200).send('Joined');
   });
 
-  router.post('/', async (req, res) => {
+  router.post('/', auth, async (req, res) => {
     const validation = validate(req);
      if(validation.error){
          //400 bad request

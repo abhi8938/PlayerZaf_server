@@ -13,6 +13,8 @@ module.exports = function (app) {
   const TxnId = await countTransactions();
   const client= await Client.findOne({ customerId:req.headers.customerid })
   if(!client) return ;
+  
+   if(req.headers.amount < 100) return res.status(400).send('Minimum Required Amount 100')
 
   if(client.walletBalance < req.headers.amount ) {
     return  res.status(400).send('Not Enough Money');

@@ -26,7 +26,6 @@ router.post('/', async (req, res) => {
      return count;
    });
    const { error } = validate(req);
-   console.log(error);
    if (error) return res.status(400).send(error.details[0].message);
 
    let client = await Client.findOne({ emailAddress: req.body.emailAddress });
@@ -113,10 +112,9 @@ router.put('/resetPassword', async (req, res) => {
   if(!client) {
     return res.status(404).json('no user exists in db to update');
   }else if(client){
-    console.log('user exists');
     return bcrypt.hash(req.body.password, salt)
                       .then( newPassword => {
-                         console.log(newPassword);
+                        
                          client.password = newPassword;
                          client.resetPasswordToken = null;
                          client.resetPasswordExpires = null;
