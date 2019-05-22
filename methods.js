@@ -9,6 +9,15 @@ const { Client } = require('./models/client');
 const Api = 'Sas4t3c3HmOMieIt8gABl61UZiksE98sSJVEpv5xxbVi6OL5txq1E8yi1jsp';
 
 //START
+async function userMatches(){
+    // get all the participants
+      //then
+
+    //get all the matches
+}
+//END
+
+//START
 async function promoCode(customerId){
     //check if promocode
     const refer = await Client.findOne({ customerId:customerId});
@@ -100,12 +109,15 @@ async function deductMoney(customerId, Amount){
 async function updateWallet(matchId, customerId){
     // console.log(matchId, customerId);
     let matchDetail = await MatchDetail.findOne({ matchId: matchId});
+    let Participants = await Participant.find({matchId:matchId});
+    if(!Participants) return;
     if(!matchDetail) {
         console.log('match not found');
         return
     }else{
         const entryfee = matchDetail.matchEntryFee;
-        matchDetail.matchParticipants = matchDetail.matchParticipants + 1;
+        matchDetail.matchParticipants = Participants.length + 1 ;
+        console.log(matchDetail.matchParticipants);
         const result = await matchDetail.save();
         let client = await Client.findOne({ customerId: customerId});
         if(!client) {
