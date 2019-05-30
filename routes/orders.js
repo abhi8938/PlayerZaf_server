@@ -35,17 +35,11 @@ router.post('/',auth, async (req, res) => {
     let orders = await Order.find();
     const order = await createOrder(req,count);
    orders = new Order(addOrder(req, order));
-  try{
+  
     orders = await orders.save();
     console.log('orders:' + orders);
     res.send(orders);
-  }
-
-  catch(ex){
-    for(field in ex.error){
-      console.log(ex.errors[field]);
-    }
-  }
+  
 });
 
 //create route to handle put request for   razorpay_payment_id

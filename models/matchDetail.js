@@ -39,6 +39,9 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 },
                 Join:{
                     type:String
+                },
+                posterLink:{
+                    type:String
                 }
 }));
      function validateMatchDetail(req){
@@ -57,7 +60,8 @@ const MatchDetail = mongoose.model('MatchDetails', new mongoose.Schema({
                 matchStatus: Joi.string().uppercase(),
                 roomId: Joi.string(),
                 password: Joi.string(),
-                Join: Joi.string()
+                Join: Joi.string(),
+                posterLink: Joi.string()
                 };
             
                 return Joi.validate(req.body, schema);

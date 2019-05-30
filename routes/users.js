@@ -135,8 +135,8 @@ await clients.forEach(client=> {
    client.version = req.body.version;
    client.save();
  });
- res.send('client Updated');
-}else if(req.body.update == false ){
+ res.send('client Updated true');
+}else if(req.body.update == false && req.body.userName != null ){
   const client = await Client.findOne({ userName: req.body.userName});
   if(!client) {
     return res.status(404).json('no user exists in db to update');
@@ -144,6 +144,13 @@ await clients.forEach(client=> {
   client.update = req.body.update;
   await client.save();
   res.send('Please download and install');
+}else if(req.body.update == false && req.body.userName == null){
+  const clients = await Client.find();
+await clients.forEach(client=> {
+   client.update = req.body.update;
+   client.save();
+ });
+ res.send('client Updated false');
 }
 });
 

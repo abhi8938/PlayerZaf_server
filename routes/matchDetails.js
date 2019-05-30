@@ -11,7 +11,7 @@ router.get('/open', auth, async (req, res) => {
   const matchdetails = await MatchDetail.find({ matchStatus: 'OPEN'});
   res.send(matchdetails);
 });
-router.get('/completed', async (req, res) => {
+router.get('/completed', auth, async (req, res) => {
   const result = new Array();
  const matchdetails = await MatchDetail
                     .find({ matchStatus: 'COMPLETED'})
@@ -32,7 +32,7 @@ router.get('/completed', async (req, res) => {
   res.send(result);
 });
 
-router.get('/ongoing',async (req, res) => {
+router.get('/ongoing', auth, async (req, res) => {
   var result2 = new Array();
   const matchdetails = await MatchDetail.find({ matchStatus: 'ONGOING'})
                                       .sort({matchId:-1})
@@ -53,6 +53,18 @@ router.get('/ongoing',async (req, res) => {
             console.log(result2);
   res.send(result2);
 });
+//create route to add image to matches
+router.put('/', async (req,res) =>{
+  let matchdetail = await MatchDetail.findOne({ matchId: req.body.matchId});
+  if(!matchdetail) return res.status(400).send('Invalid MatchId');
+   if(req.body.posterLink != null){ 
+     matchdetail.posterLink = req.body.posterLink;
+     matchdetail = await matchdetail.save();
+     res.status(200).send('Added Link');
+    }else{
+      res.status(400).send('Image Address Empty');
+    }
+})
 
 router.post('/',  async (req, res) => {
    //Validate request body
