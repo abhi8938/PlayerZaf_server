@@ -253,30 +253,28 @@ participants.map( (element) =>{
 })
 //call the api with request body and header
 const numberString = numbers.toString();
-
-var req = unirest("GET", "https://www.txtguru.in/imobile/api.php");
-
-req.headers({
+const config = {
     "cache-control": "no-cache",
-  });
-
-req.query({
-    "username": 'playerzaf.contact' ,
-    "password": "15060138",
-    "source": 'PLAZAF',
-    "dmobile": numberString,
-    "message": message
-  });
-
-  req.end(function (res) {
-    if(res.body.return == true){
-        return res.body.message
-    }else{
-        return res.body.message
+    params:{
+        "username": 'playerzaf.contact' ,
+        "password": "15060138",
+        "source": 'PLAZAF',
+        "dmobile": numberString,
+        "message": message
     }
-  });
-  return req;
-// notifyUser();
+}
+
+return axios.default.get('https://www.txtguru.in/imobile/api.php',config)
+               .then(resp =>{
+                   console.log('resp',resp.status);
+                   return resp
+            
+               }).catch(err =>{
+                   console.log('error',err);
+                   return err;
+               })
+
+
 }
 
 

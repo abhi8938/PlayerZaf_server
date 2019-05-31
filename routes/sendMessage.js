@@ -16,7 +16,7 @@ const { sendBulkMessage } = require('../methods');
      }
      var resp =  await MatchDetail.findOne({matchId:req.body.matchId});
     const messageStatus = await sendBulkMessage(req.body);
-    if(messageStatus.code == 200){
+    if(messageStatus.status == 200){
          resp.matchStatus = 'ONGOING';
          resp.roomId = req.body.roomId;
          resp.password = req.body.password;
