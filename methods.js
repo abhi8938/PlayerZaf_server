@@ -239,7 +239,7 @@ if(generated_signature == razorpay_signature){
 
 //THE END
 async function sendBulkMessage(request){
-    const message = `Attention!\n PlayerZaf ${request.matchId} is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
+    const message = `Hello Players\n PlayerZaf ${request.matchId} is about to start.\n Please find the Room Details below & join the room ASAP\n ROOMID:${request.roomId} \n PASSWORD:${request.password} \n GOOD LUCK!`;
     // find the participant of the match with matchId
 const participants = await Participant.find({ matchId: request.matchId});
 
