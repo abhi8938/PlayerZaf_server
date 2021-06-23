@@ -15,9 +15,9 @@ module.exports = function (app) {
   if(!client) return ;
   
    if(req.headers.amount < 100) return res.status(400).send('Minimum Required Amount 100')
-
+   //change client.walletBalance to client.withdrawWallet
   if(client.walletBalance < req.headers.amount ) {
-    return  res.status(400).send('Not Enough Money');
+    return res.status(400).send('Not Enough Won Money');
     }else{
 var samarray = new Array();
 

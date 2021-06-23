@@ -299,6 +299,7 @@ async function updatePlayerStats(customerId, winnings, kills){
    const previousBalance = client.walletBalance;
    const updatedBalance = previousBalance + winnings;
    client.walletBalance = updatedBalance;
+   // update 'withdrawWallet' field of client
    client.amountWon = client.amountWon + winnings;
    client.totalKills = client.totalKills + kills;
    client.matchesPlayed = client.matchesPlayed + 1;
